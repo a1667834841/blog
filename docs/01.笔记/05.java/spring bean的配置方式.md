@@ -1,0 +1,69 @@
+---
+title: spring bean的配置方式
+date: 2021-10-08 19:46:04
+permalink: /pages/e9133b/
+categories:
+  - 笔记
+  - java
+tags:
+  - 
+---
+# xml 配置bean方式
+
+# 注解式配置bean方式
+
+## 1. @Component 声明
+
+```
+/**
+ * @program: springboot
+ * @description:
+ * @author: ggBall
+ * @create: 2021-02-20 17:11
+ **/
+@Component
+@Data
+public class Dog {
+    private String name;
+    private Integer age;
+}
+
+```
+
+结果
+
+![image-20210220174447838](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210220174447838.png)
+
+## 2. 在配置类中使用 @Bean注解
+
+![image-20210220175048812](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210220175048812.png)
+
+结果
+
+![image-20210220175112752](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210220175112752.png)
+
+## 3. 继承 FactoryBean
+
+![image-20210220175608997](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210220175608997.png)
+
+结果
+
+![image-20210220175631984](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210220175631984.png)
+
+## 4. 继承BeanDefinitionRegistryPostprocessor
+
+![image-20210220182750446](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210220182750446.png)
+
+结果
+
+![image-20210220182802256](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210220182802256.png)
+
+## 5. 继承ImportBeanDefinitionRegistrar
+
+![image-20210221151920617](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210221151920617.png)
+
+
+
+使用时，需要使用@Import注解 导入 ImportBeanDefinitionRegistrar 被实现类
+
+![image-20210221152014282](D:\project\vscode\vuepress-theme-reco-demo\my-blog\blogs\笔记\java\spring bean的配置方式.assets\image-20210221152014282.png)

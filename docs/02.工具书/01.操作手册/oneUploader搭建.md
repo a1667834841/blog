@@ -1,0 +1,216 @@
+---
+title: oneUploader搭建
+date: 2021-08-30 19:15:16
+permalink: /pages/0333fd/
+categories:
+  - 工具书
+  - 操作手册
+tags:
+  - 
+---
+**一、OneDriveUploader介绍**
+
+支持上传文件和文件夹到指定目录,并保持上传前的目录结构.
+支持命令参数使用, 方便外部程序调用.
+支持自定义上传分块大小.
+支持多线程上传(多文件同时上传).
+支持根据文件大小动态调整重试次数
+
+**二、OneDrive授权**
+
+国际版, 个人版(家庭版)
+[https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=78d4dc35-7e46-42c6-9023-2d39314433a5&response_type=code&redirect_uri=http://localhost/onedrive-login&response_mode=query&scope=offline_access%20User.Read%20Files.ReadWrite.All](https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=78d4dc35-7e46-42c6-9023-2d39314433a5&response_type=code&redirect_uri=http://localhost/onedrive-login&response_mode=query&scope=offline_access User.Read Files.ReadWrite.All)
+
+中国版(世纪互联)
+[https://login.chinacloudapi.cn/common/oauth2/v2.0/authorize?client_id=dfe36e60-6133-48cf-869f-4d15b8354769&response_type=code&redirect_uri=http://localhost/onedrive-login&response_mode=query&scope=offline_access%20User.Read%20Files.ReadWrite.All](https://login.chinacloudapi.cn/common/oauth2/v2.0/authorize?client_id=dfe36e60-6133-48cf-869f-4d15b8354769&response_type=code&redirect_uri=http://localhost/onedrive-login&response_mode=query&scope=offline_access User.Read Files.ReadWrite.All)
+
+然后会获取到一个网址，不要关闭，后面用到。
+
+![image-20210608184714881](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210608184714881.png)
+
+**三、LInux下，OneDriveUploader的使用**
+
+1、下载，并给权限
+
+```
+wget https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader -P /usr/local/bin/
+chmod +x /usr/local/bin/OneDriveUploader
+```
+
+2、初始化
+
+```
+# 国际版
+OneDriveUploader -a "url"
+# 个人版(家庭版)
+OneDriveUploader -ms -a "url"
+# 中国版(世纪互联)
+OneDriveUploader -cn -a "url"
+```
+
+把url替换为上图浏览器中获得的地址，以http://loaclhost开头的。一次授权，以后就不会用到了。
+
+![img](https://zhujiwiki.com/wp-content/uploads/2019/12/oneupload-2.jpg)
+
+3、配置文件
+
+授权成功后，就在同目录生成了配置文件 auth.json （所以，为便于操作，选择个好记的目录执行 初始化）
+修改配置文件，也可以不修改，我主要是改了线程
+
+![img](https://zhujiwiki.com/wp-content/uploads/2019/12/oneupload-3.jpg)
+
+4、使用命令，所有命令后面的参数都要有英文双引号 “”
+
+-s // *必要参数，要上传的文件或文件夹
+-r // 上传到网盘中的某个目录，默认: 根目录
+-t // 线程数, 同时上传文件的个数. 默认: 2
+-b // 自定义上传分块大小, 可以提高网络吞吐量, 受限于磁盘性能和网络速度.
+-c // 配置文件路径
+-f // 开关
+// 加上 -f 参数，强制读取 auth.json 中的块大小配置和多线程配置.
+// 不加 -f 参数, 每次覆盖保存当前使用参数到 auth.json 配置文件中.
+-n // 上传单个文件时,在网盘中重命名
+
+5、使用举例
+
+```
+# 将同目录下的 mm00.jpg 文件上传到 OneDrive 网盘根目录
+OneDriveUploader -s "mm00.jpg"
+
+# 将同目录下的 mm00.jpg 文件上传到 OneDrive 网盘根目录,并改名为 mm01.jpg
+OneDriveUploader -s "mm00.jpg" -n "mm01.jpg"
+
+# 将同目录下的 Download 文件夹上传到 OneDrive 网盘根目录
+OneDriveUploader -s "Download" 
+
+# 将同目录下的 Download 文件夹上传到 OneDrive 网盘Test目录中
+OneDriveUploader -s "Download" -r "Test"
+
+# 将同目录下的 Download 文件夹上传到 OneDrive 网盘Test目录中, 使用 10 线程
+OneDriveUploader -t 10 -s "Download" -r "Test"
+
+# 将同目录下的 Download 文件夹上传到 OneDrive 网盘Test目录中, 使用 15 线程, 并设置分块大小为 20M
+OneDriveUploader -t 15 -b 20 -s "Download" -r "Test"
+```
+
+6、如果文件多、大，可让程序后台运行：nohub OneDriveUploader -s “文件或目录” &
+
+**四、Windows下，OneDriveUploader的使用**
+
+下载软件到英文目录，最好简单些。
+
+然后 win + R，输入 cmd，进入命令行。
+
+剩下的操作和Linux一样，只是文件为 OneDriveUploader.exe
+
+**五、MacOS，咱没有，就不说了。**
+
+文件下载：https://github.com/MoeClub/OneList/tree/master/OneDriveUploader/amd64
+
+OneDriveUploader本地下载：[OneDriveUploader-20191205](https://zhujiwiki.com/wp-content/uploads/2019/12/OneDriveUploader-20191205.zip)
+
+另外，loc有网友做了个更傻瓜的win下客户端：[ODUG](https://www.hostloc.com/thread-622498-1-1.html)，**本地下载**：[ODUG–OneDrive上传工具](https://zhujiwiki.com/wp-content/uploads/2019/12/ODUG-OneDrive上传工具.zip)
+
+设定说明
+OneDrive目录：如目录不存在将自动创建目录
+线程：多线程上传，默认3，可自行修改
+块大小：上传分块大小，默认10MB，可自行修改
+
+注：
+1、软件支持单文件和目录上传
+2、上传到OneDrive只支持根目录和二级目录，不支持三级目录
+3、软件目录可整体移动，目录内文件不可移动，不可改名，不可缺失，否则将不可使用！
+
+**六、自动上传文件到OneDrive后，自动删除文件**
+
+需要同时使用 Aria2 和 OneDriveUploader。
+
+在 /root 下新建 rcup.sh
+
+```
+#!/bin/bash
+
+GID="$1";
+FileNum="$2";
+File="$3";
+MaxSize="15728640";
+Thread="3";  #默认3线程，自行修改，服务器配置不好的话，不建议太多
+Block="20";  #默认分块20m，自行修改
+RemoteDIR="";  #上传到Onedrive的路径，默认为根目录，如果要上传到MOERATS目录，""里面请填成MOERATS
+LocalDIR="/www/download/";  #Aria2下载目录，记得最后面加上/
+Uploader="/usr/local/bin/OneDriveUploader";  #上传的程序完整路径，默认为本文安装的目录
+Config="/root/auth.json";  #初始化生成的配置auth.json绝对路径，参考前面
+
+
+if [[ -z $(echo "$FileNum" |grep -o '[0-9]*' |head -n1) ]]; then FileNum='0'; fi
+if [[ "$FileNum" -le '0' ]]; then exit 0; fi
+if [[ "$#" != '3' ]]; then exit 0; fi
+
+function LoadFile(){
+  if [[ ! -e "${Uploader}" ]]; then return; fi
+  IFS_BAK=$IFS
+  IFS=$'\n'
+  tmpFile="$(echo "${File/#$LocalDIR}" |cut -f1 -d'/')"
+  FileLoad="${LocalDIR}${tmpFile}"
+  if [[ ! -e "${FileLoad}" ]]; then return; fi
+  ItemSize=$(du -s "${FileLoad}" |cut -f1 |grep -o '[0-9]*' |head -n1)
+  if [[ -z "$ItemSize" ]]; then return; fi
+  if [[ "$ItemSize" -ge "$MaxSize" ]]; then
+    echo -ne "\033[33m${FileLoad} \033[0mtoo large to spik.\n";
+    return;
+  fi
+  ${Uploader} -c "${Config}" -t "${Thread}" -b "${Block}" -s "${FileLoad}" -r "${RemoteDIR}"
+  if [[ $? == '0' ]]; then
+    rm -rf "${FileLoad}";
+  fi
+  IFS=$IFS_BAK
+}
+LoadFile;
+```
+
+给权限
+
+```
+chmod +x rcup.sh
+```
+
+然后在Aria2配置文件中加上一行，然后重启Aria2。
+
+```
+on-download-complete=/root/rcup.sh
+```
+
+执行
+
+```
+bash /root/rcup.sh
+```
+
+如果报错，解决方法。
+
+```
+1、安装dos2unix
+Centos：yum install dos2unix -y
+Debian/Ubuntu：apt install dos2unix -y
+2、转换格式
+dos2unix /root/rcup.sh
+```
+
+如何使用aria2
+
+```
+谷歌浏览器插件aria2 for chrome
+自己安装AriaNg
+安卓手机软件aria2app
+```
+
+
+
+
+
+本机目录
+
+```
+D:\project\idea\OneList\OneDriveUploader\amd64\win>\OneDriveUploader.exe
+```
+

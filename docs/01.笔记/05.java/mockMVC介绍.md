@@ -1,0 +1,250 @@
+---
+title: MockMvc介绍
+date: 2021-01-30 00:00:00
+tags: 
+  - java
+categories: 
+  - 笔记
+permalink: /pages/7d2b00/
+---
+
+## MockMvc
+
+## 1. 简介
+为何使用MockMvc？
+
+ 对模块进行集成测试时，希望能够通过输入URL对Controller进行测试，如果通过启动服务器，建立http client进行测试，这样会使得测试变得很麻烦，比如，启动速度慢，测试验证不方便，依赖网络环境等，所以为了可以对Controller进行测试，我们引入了MockMVC。
+
+  MockMvc实现了对Http请求的模拟，能够直接使用网络的形式，转换到Controller的调用，这样可以使得测试速度快、不依赖网络环境，而且提供了一套验证的工具，这样可以使得请求的验证统一而且很方便。
+
+
+
+## 2. 对象介绍
+
+#### 接口MockMvcBuilder
+
+> 提供一个唯一的build方法，用来构造MockMvc。主要有两个实现：**StandaloneMockMvcBuilder**和**DefaultMockMvcBuilder**，分别对应两种测试方式，即独立安装和集成Web环境测试（并不会集成真正的web环境，而是通过相应的Mock API进行模拟测试，无须启动服务器）。
+>
+> MockMvcBuilders提供了对应的创建方法**standaloneSetup**方法和**webAppContextSetup**方法，在使用时直接调用即可。
+
+MockMvcBuilders 创建 MockMvc对象的两种方法：
+
+```java
+
+ private MockMvc mockMvc;
+
+ @Autowired
+ private WebApplicationContext webApplicationContext;
+
+    @Before
+    public void setup() {
+        // 实例化方式一 独立安装
+        mockMvc = MockMvcBuilders.standaloneSetup(new MockTestcontroller()).build();
+
+        // 实例化方式二 集成Web环境测试
+//		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+```
+
+
+
+#### MockMvcRequestBuilders 请求构造器
+
+> ​    从名字可以看出，RequestBuilder用来构建请求的，其提供了一个方法**buildRequest**(ServletContext servletContext)用于构建MockHttpServletRequest；其主要有两个子类
+>
+> **MockHttpServletRequestBuilder**和**MockMultipartHttpServletRequestBuilder**（如文件上传使用），即用来Mock客户端请求需要的所有数据。
+
+**主要API：**
+MockHttpServletRequestBuilder get(String urlTemplate, Object... urlVariables)：根据uri模板和uri变量值得到一个GET请求方式的RequestBuilder。如果在controller的方法中method选择的是RequestMethod.GET，那在controllerTest中对应就要使用MockMvcRequestBuilders.get()。
+
+1. post(String urlTemplate, Object... urlVariables)：同get类似，但是是POST方法；
+2. put(String urlTemplate, Object... urlVariables)：同get类似，但是是PUT方法；
+3. delete(String urlTemplate, Object... urlVariables) ：同get类似，但是是DELETE方法；
+4. options(String urlTemplate, Object... urlVariables)：同get类似，但是是OPTIONS方法；
+
+
+
+#### ResultActions
+
+> 调用MockMvc.perform(RequestBuilder requestBuilder)后将得到ResultActions，对ResultActions有以下三种处理：
+
+**ResultActions.andExpect**：添加执行完成后的断言。添加ResultMatcher验证规则，验证控制器执行完成后结果是否正确；
+
+**ResultActions.andDo**：添加一个结果处理器，比如此处使用.andDo(MockMvcResultHandlers.print())输出整个响应结果信息，可以在调试的时候使用。
+
+**ResultActions.andReturn**：表示执行完成后返回相应的结果
+
+
+
+#### ResultMatchers 结果匹配器
+
+​    ResultMatcher用来匹配执行完请求后的结果验证，其就一个match(MvcResult result)断言方法，如果匹配失败将抛出相应的异常，spring mvc测试框架提供了很多***ResultMatchers来满足测试需求。
+具体请百度。
+
+#### MvcResult
+
+> 即执行完控制器后得到的整个结果，并不仅仅是返回值，其包含了测试时需要的所有信息。
+
+aqi:
+
+1. MockHttpServletRequest getRequest()：得到执行的请求；
+2. MockHttpServletResponse getResponse()：得到执行后的响应；
+3. Object getHandler()：得到执行的处理器，一般就是控制器；
+4. HandlerInterceptor[] getInterceptors()：得到对处理器进行拦截的拦截器；
+5. ModelAndView getModelAndView()：得到执行后的ModelAndView；
+6. Exception getResolvedException()：得到HandlerExceptionResolver解析后的异常；
+7. FlashMap getFlashMap()：得到FlashMap；
+8. Object getAsyncResult()/Object getAsyncResult(long timeout)：得到异步执行的结果；
+
+## 测试逻辑流程
+
+**测试逻辑**
+
+1. MockMvcBuilder构造MockMvc的构造器；
+2. mockMvc调用perform，执行一个RequestBuilder请求，调用controller的业务处理逻辑；
+3. perform返回ResultActions，返回操作结果，通过ResultActions，提供了统一的验证方式；
+4. 使用StatusResultMatchers对请求结果进行验证；
+5. 使用ContentResultMatchers对请求返回的内容进行验证；
+
+
+
+实际代码
+
+```java
+
+        /*
+         * 1、mockMvc.perform执行一个请求。
+         * 2、MockMvcRequestBuilders.get("XXX")构造一个请求。
+         * 3、ResultActions.param添加请求传值
+         * 4、ResultActions.accept(MediaType.TEXT_HTML_VALUE))设置返回类型
+         * 5、ResultActions.andExpect添加执行完成后的断言。
+         * 6、ResultActions.andDo添加一个结果处理器，表示要对结果做点什么事情
+         *   比如此处使用MockMvcResultHandlers.print()输出整个响应结果信息。
+         * 7、ResultActions.andReturn表示执行完成后返回相应的结果。
+         */
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
+                .get("/mock/test3")
+                .characterEncoding("UTF-8")
+                // 设置返回值类型为utf-8，否则默认为ISO-8859-1
+                .accept(MediaType.APPLICATION_JSON_VALUE));
+        // 设置 返回值类型为utf-8
+        resultActions
+                .andReturn()
+                .getResponse()
+                .setCharacterEncoding("UTF-8");
+
+
+        // 返回结果
+            String contentAsString = resultActions
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("Hello Tom!"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+```
+
+结果
+
+![image-20201227145445423](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201227145445423.png)
+
+## 一些常用的测试
+
+>  andExpect()里调用的方法是 ResultMatcher的方法 来验证结果的正确性
+
+### 1.测试普通控制器
+
+```java
+mockMvc.perform(get("/user/{id}", 1)) //执行请求  
+            .andExpect(model().attributeExists("user")) //验证存储模型数据  
+            .andExpect(view().name("user/view")) //验证viewName  
+            .andExpect(forwardedUrl("/WEB-INF/jsp/user/view.jsp"))//验证视图渲染时forward到的jsp  
+            .andExpect(status().isOk())//验证状态码  
+            .andDo(print()); //输出MvcResult到控制台
+
+
+```
+
+### 2.得到MvcResult自定义验证
+
+```java
+MvcResult result = mockMvc.perform(get("/user/{id}", 1))//执行请求  
+        .andReturn(); //返回MvcResult  
+Assert.assertNotNull(result.getModelAndView().getModel().get("user")); //自定义断言 
+
+1234
+```
+
+### 3.验证请求参数绑定到模型数据及Flash属性
+
+```java
+mockMvc.perform(post("/user").param("name", "zhang")) //执行传递参数的POST请求(也可以post("/user?name=zhang"))  
+            .andExpect(handler().handlerType(UserController.class)) //验证执行的控制器类型  
+            .andExpect(handler().methodName("create")) //验证执行的控制器方法名  
+            .andExpect(model().hasNoErrors()) //验证页面没有错误  
+            .andExpect(flash().attributeExists("success")) //验证存在flash属性  
+            .andExpect(view().name("redirect:/user")); //验证视图  
+
+```
+
+### 4.文件上传
+
+```java
+byte[] bytes = new byte[] {1, 2};  
+mockMvc.perform(fileUpload("/user/{id}/icon", 1L).file("icon", bytes)) //执行文件上传  
+        .andExpect(model().attribute("icon", bytes)) //验证属性相等性  
+        .andExpect(view().name("success")); //验证视图 
+
+```
+
+### 5.JSON请求/响应验证
+
+```java
+String requestBody = "{\"id\":1, \"name\":\"zhang\"}";  
+    mockMvc.perform(post("/user")  
+            .contentType(MediaType.APPLICATION_JSON).content(requestBody)  
+            .accept(MediaType.APPLICATION_JSON)) //执行请求  
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON)) //验证响应contentType  
+            .andExpect(jsonPath("$.id").value(1)); //使用Json path验证JSON 请参考http://goessner.net/articles/JsonPath/  
+      
+    String errorBody = "{id:1, name:zhang}";  
+    MvcResult result = mockMvc.perform(post("/user")  
+            .contentType(MediaType.APPLICATION_JSON).content(errorBody)  
+            .accept(MediaType.APPLICATION_JSON)) //执行请求  
+            .andExpect(status().isBadRequest()) //400错误请求  
+            .andReturn();  
+      
+    Assert.assertTrue(HttpMessageNotReadableException.class.isAssignableFrom(result.getResolvedException().getClass()));//错误的请求内容体
+
+
+```
+
+### 6.异步测试
+
+```java
+//Callable  
+    MvcResult result = mockMvc.perform(get("/user/async1?id=1&name=zhang")) //执行请求  
+            .andExpect(request().asyncStarted())  
+            .andExpect(request().asyncResult(CoreMatchers.instanceOf(User.class))) //默认会等10秒超时  
+            .andReturn();  
+      
+    mockMvc.perform(asyncDispatch(result))  
+            .andExpect(status().isOk())  
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))  
+            .andExpect(jsonPath("$.id").value(1));  
+
+```
+
+### 7.全局配置
+
+```java
+mockMvc = webAppContextSetup(wac)  
+            .defaultRequest(get("/user/1").requestAttr("default", true)) //默认请求 如果其是Mergeable类型的，会自动合并的哦mockMvc.perform中的RequestBuilder  
+            .alwaysDo(print())  //默认每次执行请求后都做的动作  
+            .alwaysExpect(request().attribute("default", true)) //默认每次执行后进行验证的断言  
+            .build();  
+      
+    mockMvc.perform(get("/user/1"))  
+            .andExpect(model().attributeExists("user"));
+```

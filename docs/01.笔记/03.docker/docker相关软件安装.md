@@ -1,0 +1,1114 @@
+---
+title: docker 安装相关操作
+date: 2021-01-30 00:00:00
+tags: 
+  - docker
+categories: 
+  - 笔记
+permalink: /pages/401855/
+---
+
+# 安装centos
+
+
+
+## 修改centos的时区【手动】
+
+```shell
+1.进入容器
+# 没有新建容器，启动并进入容器内部
+docker run -it 【容器名】 /bin/bash
+
+# 容器正在运行，进入容器
+docker exec -it 【容器名】/bin/bash
+
+2.设置时区
+	# 1、CentOS6、Ubuntu16（有效）
+	cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+    # 2、CentOS7、RHEL7、Scientific Linux 7、Oracle Linux 7 最好的方法是使用timedatectl命令（未成功）
+    timedatectl list-timezones |grep Shanghai    #查找中国时区的完整名称
+    Asia/Shanghai
+    timedatectl set-timezone Asia/Shanghai    #其他时区以此类推
+
+    # 3、直接手动创建软链接（有效）
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+```
+
+
+
+## 修改centos的时区 【自动版】
+
+### 1.编写docker file
+
+```dockerfile
+FROM centos
+# 修改为上海时区
+RUN  /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+CMD echo finish
+```
+
+**注意**： `cmd`  一般放在末尾，只是用一次，因为 `cmd` 会被覆盖前面的 `run` ， `cmd` , `envPoint` 命令所覆盖
+
+   当执行 `cp` 命令,需要人为的y/n时，可以使用 `/bin/cp` ,来强制yes
+
+###  2.创建镜像
+
+```dockerfile
+docker build -f dockerfile -t  镜像名:版本号 .
+#  -f :指定要使用的Dockerfile路径；
+# --tag, -t: 镜像的名字及标签，通常 name:tag 或者 name 格式；可以在一次构建中为一个镜像设置多个标签。
+```
+
+### 3. 启动并进入镜像(退出会自动关闭容器)
+
+```dockerfile
+docker run -it 镜像名:版本号 /bin/bash 
+# -i: 以交互模式运行容器，通常与 -t 同时使用;
+# -t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用;
+```
+
+------
+
+
+
+# 安装jdk
+
+## linux 手动安装 jdk
+
+1. 下载jdk
+
+   先去官网找到jdk1.8：[点我快速进入官网](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+
+2. 使用ftp 将我们的 jdk压缩包 放在指定目录（我放在 /opt/java目录下）
+
+   事先使用  'mkdir /opt/java'   创建好文件夹
+
+3. 解压jdk
+
+我们可以在指定的目录下解压文件（/opt/java）
+
+```shell
+tar -zxvf jdk-8u211-linux-x64.tar.gz
+```
+
+​	4.配置环境变量
+
+​	在  /etc/profile 下添加
+
+```shell
+export JAVA_HOME=/opt/software/jdk1.8.0_201
+export CLASSPATH=$:CLASSPATH:$JAVA_HOME/lib/ 
+export PATH=$PATH:$JAVA_HOME/bin
+```
+
+
+
+## docker 自动版
+
+### 1.首先编写dockerfile 文件 
+
+### 2.将需要的安装包放在dockerfile文件同级目录
+
+
+
+```dockerfile
+# 根据镜像2.1为基础
+FROM mycentos:2.1
+# 创建java目录
+RUN mkdir -p /usr/local/java/jdk
+
+# 添加并解压 jdk
+ADD jdk-8u201-linux-x64.tar.gz /usr/local/java/jdk
+
+# 创建软连接
+#RUN ln -s /opt/java/jdk1.8.0_201 /usr/local/java/jdk
+
+# 设置jdk环境变量
+ENV JAVA_HOME /usr/local/java/jdk/jdk1.8.0_201
+ENV JRE_HOME ${JAVA_HOME}/jre
+ENV CLASSPATH :${JAVA_HOME}/lib:${JRE_HOME}/lib
+ENV PATH ${JAVA_HOME}/bin:$PATH
+
+CMD echo finish
+
+
+```
+
+**解释**
+
+```dockerfile
+mkdir -p xx/yy
+#好处就是一次可以创建多级文件夹，若xx文件夹不存在，则先创建xx文件夹，然后在xx文件夹下创建yy文件夹
+
+ADD 源目录（当前目录） 容器下的目录
+# 将源目录的文件 添加到容器指定目录
+ENV 
+#配置环境变量
+```
+
+### 3. 利用编写好的dockerfile 创建镜像
+
+```
+docker build -f dockerfile -t mycentos_jdk:3.0 .
+```
+
+------
+
+
+
+# 安装 tomcat
+
+## 手动安装tomcat
+
+### 1. 去官网下载tomcat(这一步自行下载，还有提前安装好jdk)
+
+### 2.使用 xftp 将文件移入centos 内部
+
+![image-20201124230303458](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201124230303458.png)
+
+### 3. 去指定的目录解压tomcat
+
+```shell
+tar -zxvf apache-tomcat-8.5.59.tar.gz
+```
+
+### 4. 启动tomcat
+
+```shell
+/opt/docker_tomcat/apache-tomcat-8.5.59/bin/startup.sh 
+```
+
+![image-20201125003702714](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201125003702714.png)
+
+### 5.关闭tomcat
+
+```
+/opt/docker_tomcat/apache-tomcat-8.5.59/bin/shutdown.sh 
+```
+
+![image-20201125003749791](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201125003749791.png)
+
+> 也可以将这两句命令封装成脚本，并赋予可执行权限
+
+![image-20201125003950906](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201125003950906.png)
+
+脚本封装命令
+
+```shell
+# 创建tomcat启动脚本文件
+vim tomcat_startup.sh
+# 输入
+sh /opt/docker_tomcat/apache-tomcat-8.5.59/bin/startup.sh 
+# 保持退出
+exc
+:wq
+
+# 创建tomcat关闭脚本文件
+vim tomcat_shutdown.sh
+# 输入
+sh /opt/docker_tomcat/apache-tomcat-8.5.59/bin/startup.sh 
+# 保持退出
+exc
+:wq
+
+# 赋予文件可执行权限
+chmod +x tomcat_shutdown.sh
+chmod +x tomcat_startup.sh
+```
+
+## 使用dockerfile 安装 tomcat
+
+1.前提条件：将jdk 和tomcat 安装包 提前放在dockerfile 文件 同级目录下
+
+![image-20201128175844988](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128175844988.png)
+
+2.准备dockerfile:
+
+```dockerfile
+FROM centos
+# 作者信息
+MAINTAINER ggBall<1667834841@qq.com>
+# 添加 tomcat 和 jdk的安装包
+ADD apache-tomcat-8.5.59.tar.gz  /usr/local
+ADD jdk-8u201-linux-x64.tar.gz  /usr/local
+
+ENV MYPATH /usr/local
+# 设置 指令的工作目录
+WORKDIR $MYPATH
+# 设置环境变量
+ENV JAVA_HOME /usr/local/jdk1.8.0_201
+ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+ENV CATALINA_HOME /usr/local/apache-tomcat-8.5.59
+ENV CATALINA_BASH /usr/local/apache-tomcat-8.5.59
+ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin
+
+EXPOSE 8080
+
+CMD /usr/local/apache-tomcat-8.5.59/bin/startup.sh && tail -F /usr/local/apache-tomcat-8.5.59/bin/logs/catalina.out
+
+```
+
+**解释**
+
+>   **WORKDIR指令**：设置Dockerfile中的任何RUN，CMD，ENTRPOINT，COPY和ADD指令的工作目录。如果WORKDIR指 定的目录不存在，即使随后的指令没有用到这个目录，都会创建。
+>
+>   **EXPOSE命令**：只是声明了容器应该打开的端口并没有实际上将它打开!
+>
+> 也就是说，如果你不用-p或者-P中指定要映射的端口，你的容器是不会映射端口出去的，从而我们知道我们是没有办法在Dockerfile里面进行端口映射的，我们只能在容器启动的时候或者在docker-compose文件中使用`ports`来指定将要映射的端口。
+>
+> 那我们的EXPOSE能用来干什么呢?第一点就是写在Dockerfile中进行声明，能让运维人员或者后来者知道我们开启了容器的哪些端口。还有一点就是，当我们声明了EXPOSE端口之后，我们使用-P命令进行随机映射的时候，是会对这个端口进行映射的。比如说我们现在对一个tomcat容器进行EXPOSE 9999声明，那么我们进行-P随机映射的时候是会对9999端口进行映射的。
+
+3. 构建镜像
+
+   ```dockerfile
+   docker build -f dockerfile -t mycentos_tomcat:4.0 .
+   ```
+
+   ![image-20201128180112515](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128180112515.png)
+
+4. 将镜像后台运行成容器
+
+   ```dockerfile
+   docker run -p 8887:8080 -d mycentos_tomcat:4.0
+   
+   #格式
+   docker run -p hostPort:containerPort -d 镜像名:版本号
+   # -p 宿主机端口:容器端口 将容器端口映射到宿主机端口
+   # -d 使容器后台运行
+   ```
+
+   ![image-20201128180432349](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128180432349.png)
+
+可以看到 我们可以通过8887端口访问到容器内的tomcat
+
+![image-20201128180511687](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128180511687.png)
+
+------
+
+
+
+# 安装nginx
+
+## linux 安装 nginx
+
+1. 安装依赖
+
+Nginx的安装依赖于以下三个包，意思就是在安装Nginx之前首先必须安装一下的三个包，注意安装顺序如下：
+
+```
+//1 SSL功能需要openssl库，直接通过yum安装: 
+yum install openssl
+//2 gzip模块需要zlib库，直接通过yum安装: 
+yum install zlib
+//3 rewrite模块需要pcre库，直接通过yum安装: 
+yum install pcre
+```
+
+2. 安装Nginx依赖:
+
+```
+rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+```
+
+3. 可以用yum 一键安装Nginx 和手动安装nginx
+
+   ### yum 方式
+
+   ```shell
+   # 安装nginx
+   yum install nginx
+   # 启动 nginx
+   service nginx start
+   ```
+
+   ### 手动方式
+
+   ```shell
+   # 1.下载并解压安装包
+   # 创建一个文件夹
+   cd /usr/local
+   mkdir nginx
+   cd nginx
+   # 下载tar包
+   wget http://nginx.org/download/nginx-1.13.7.tar.gz
+   tar -xvf nginx-1.13.7.tar.gz
+   
+   # 2.安装nginx
+   # 进入nginx目录
+   cd /usr/local/nginx
+   # 进入目录
+   cd nginx-1.13.7
+   # 执行命令
+   ./configure
+   # 执行make命令
+   make
+   # 执行make install命令
+   make install
+   
+   # 3. 配置nginx.conf
+   # 打开配置文件 修改配置
+   vi /usr/local/nginx/conf/nginx.conf
+   /usr/local/nginx/sbin/nginx -s reload
+   # 如果出现报错：nginx: [error] open() ＂/usr/local/nginx/logs/nginx.pid＂ failed
+   # 则运行： /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+   # 再次启动即可！
+   ```
+
+   >设置 自定义端口  最好不要是80
+
+   ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE1LmNuYmxvZ3MuY29tL2Jsb2cvMTA5NTMyOS8yMDE3MDMvMTA5NTMyOS0yMDE3MDMyODE5MzkwMDAyOS0yMDI0MDE3NzUyLnBuZw?x-oss-process=image/format,png)
+
+   成功！
+
+   ![image-20201213160518870](C:\Users\16678\AppData\Roaming\Typora\typora-user-images\image-20201213160518870.png)
+
+   
+
+### 注意
+
+>一般服务器不对外开放端口，可能需要开放端口
+
+```shell
+//查看已开放的端口：
+firewall-cmd --list-ports
+//默认80端口加入防火墙访问白名单中：
+firewall-cmd --permanent --zone=public --add-port=8883/tcp
+使用命令使其生效：
+firewall-cmd --reload
+```
+
+
+
+## dockerfile 编辑 含有nginx的镜像
+
+
+
+```shell
+1，安装nginx
+
+1
+docker pull nginx
+2，随便启动一下nginx，测试是否安装成功
+
+   a，启动nginx
+
+1
+sudo docker run --name nginx-test -p 8081:80 -d nginx
+　执行后，返回一串代码表示启动安装成功
+
+3，修改nginx配置，把docker里面的nginx相关配置指向方便修改的目录
+
+ a，创建目录(自行创建详细目录)
+
+1
+mkdir -p /opt/docker_nginx/www/html /opt/docker_nginx/logs /opt/docker_nginx/conf /opt/docker_nginx/conf.d
+ b，复制docker里面的nginx配置到以上目录
+
+　  执行docker ps，然后复制containerId，并执行复制nginx.conf
+
+1
+sudo docker cp 6e22d0ea44c2:/etc/nginx/nginx.conf /opt/docker_nginx/conf
+sudo docker cp 6d5e182cf38d:/etc/nginx/conf.d/default.conf /opt/docker_nginx/conf.d/default.conf
+4，关闭并移除之前的nginx容器
+
+1
+2
+3
+4
+5
+6
+#查看所有的容器编号
+docker ps -l
+#移除容器
+docker rm <container ID>
+#停止容器
+docker container stop <container ID>
+5，正式启动nginx容器
+
+1
+sudo docker run -d -p 8884:80 \
+--name nginx-docker \
+-v /opt/docker_nginx/www/html:/usr/share/nginx/html \
+-v /opt/docker_nginx/conf/nginx.conf:/etc/nginx/nginx.conf \
+-v /opt/docker_nginx/logs:/var/log/nginx \
+-v /opt/docker_nginx/conf.d:/etc/nginx/conf.d \
+nginx
+　　执行后，返回一串代码表示启动成功
+
+6，在/usr/local/docker_nginx/www/html目录下，创建index.html，然后直接访问即可
+
+     http://xxxxxx:8081/index.html
+```
+
+
+
+# 安装node
+
+## 1. 获取node 
+
+wget https://npm.taobao.org/mirrors/node/v14.16.0/node-v14.16.0-linux-x64.tar.xz
+
+## 2.解压
+
+***.tar.xz格式文件需要两部解压步骤
+
+1>xz -d node-v14.16.0-linux-x64.tar.xz
+
+2>tar -xvf node-v14.16.0-linux-x64.tar
+
+## 3.配置环境目录
+
+ln -s /usr/local/node/node-v14.16.0-linux-x64/bin/node /usr/bin/node
+
+ln -s /usr/local/node/node-v14.16.0-linux-x64/bin/npm /usr/bin/npm
+
+其中/usr/local/node为node安装目录
+
+
+
+删除软连接
+
+rm -rf   /usr/bin/node
+
+rm -rf   /usr/bin/npm
+
+## 4.验证
+
+node -v
+
+输出版本号v8.11.2即说明已完成
+
+
+
+## 卸载node
+
+## 1.自带工具删除
+
+yum remove nodejs npm -y 
+
+## 2.手动删除残留
+
+进入 /usr/local/lib 删除所有 node 和 node_modules文件夹
+
+进入 /usr/local/include 删除所有 node 和 node_modules 文件夹
+
+进入 /usr/local/bin 删除 node 的可执行文件node和npm
+
+检查 ~ 文件夹里面的"local"  "lib"  "include"  文件夹，然后删除里面的所有  "node" 和  "node_modules" 文件夹
+
+完成。
+
+
+
+# 安装redis
+
+
+
+
+
+网上搜索了一筐如何在Linux下安装部署Redis的文章，各种文章混搭在一起勉强安装成功了。自己也记录下，方便后续安装时候有个借鉴之处。
+
+- Redis版本 5.0.4
+- 服务器版本 Linux CentOS 7.6 64位
+
+### 下载Redis
+
+进入官网找到下载地址 https://redis.io/download
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181030054-1253389575.png)
+
+ 
+
+右键Download按钮，选择复制链接。
+进入到Xshell控制台(默认当前是root根目录)，输入wget 将上面复制的下载链接粘贴上，如下命令:
+
+```
+wget http:``//download.redis.io/releases/redis-5.0.7.tar.gz
+```
+
+敲入回车键执行后如下图:
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181111300-1365895938.png)
+
+等待下载完成。
+
+### 解压并安装Redis
+
+ **解压**
+
+下载完成后需要将压缩文件解压，输入以下命令解压到当前目录
+
+```
+tar -zvxf redis-5.0.7.tar.gz
+```
+
+解压后在根目录上输入ls 列出所有目录会发现与下载redis之前多了一个redis-5.0.7.tar.gz文件和 redis-5.0.7的目录。
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181254662-102495021.png) 
+
+**移动redis目录**
+
+一般都会将redis目录放置到 /usr/local/redis目录，所以这里输入下面命令将目前在/root目录下的redis-5.0.7文件夹更改目录，同时更改文件夹名称为redis。
+
+```
+mv /opt/redis/redis-5.0.7 /usr/local/redis
+```
+
+cd 到/usr/local目录下输入ls命令可以查询到当前目录已经多了一个redis子目录，同时/root目录下已经没有redis-5.0.7文件夹
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181338879-741133670.png)
+
+ 
+
+ 
+
+**编译**
+
+cd到/usr/local/redis目录，输入命令make执行编译命令，接下来控制台会输出各种编译过程中输出的内容。
+
+```
+make
+```
+
+最终运行结果如下:
+
+ ![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181414604-1780484458.png)
+
+ 
+
+ 
+
+ **安装**
+
+输入以下命令
+
+```
+make PREFIX=/usr/local/redis install
+```
+
+这里多了一个关键字 **`PREFIX=`** 这个关键字的作用是编译的时候用于指定程序存放的路径。比如我们现在就是指定了redis必须存放在/usr/local/redis目录。假设不添加该关键字Linux会将可执行文件存放在/usr/local/bin目录，
+
+库文件会存放在/usr/local/lib目录。配置文件会存放在/usr/local/etc目录。其他的资源文件会存放在usr/local/share目录。这里指定号目录也方便后续的卸载，后续直接rm -rf /usr/local/redis 即可删除redis。
+
+执行结果如下图:
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181518488-529232514.png)
+
+#### 启动redis
+
+根据上面的操作已经将redis安装完成了。在目录/usr/local/redis 输入下面命令启动redis
+
+```
+./bin/redis-server& ./redis.conf
+```
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181558066-643842427.png)
+
+ 
+
+ 
+
+ 上面的启动方式是采取后台进程方式,下面是采取显示启动方式(如在配置文件设置了daemonize属性为yes则跟后台进程方式启动其实一样)。
+
+```
+./bin/redis-server ./redis.conf
+```
+
+两种方式区别无非是有无带符号&的区别。 redis-server 后面是配置文件，目的是根据该配置文件的配置启动redis服务。redis.conf配置文件允许自定义多个配置文件，通过启动时指定读取哪个即可。
+
+#### redis.conf配置文件
+
+在目录/usr/local/redis下有一个redis.conf的配置文件。我们上面启动方式就是执行了该配置文件的配置运行的。我么可以通过cat、vim、less等Linux内置的读取命令读取该文件。
+
+也可以通过redis-cli命令进入redis控制台后通过CONFIG GET * 的方式读取所有配置项。 如下：
+
+```
+redis-cli``CONFIG GET *
+```
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181816311-1873864369.png)
+
+回车确认后会将所有配置项读取出来，如下图
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181830812-1639211591.png)
+
+这里列举下比较重要的配置项
+
+| 配置项名称     | 配置项值范围                    | 说明                                                         |
+| -------------- | ------------------------------- | ------------------------------------------------------------ |
+| daemonize      | yes、no                         | yes表示启用守护进程，默认是no即不以守护进程方式运行。其中Windows系统下不支持启用守护进程方式运行 |
+| port           |                                 | 指定 Redis 监听端口，默认端口为 6379                         |
+| bind           |                                 | 绑定的主机地址,如果需要设置远程访问则直接将这个属性备注下或者改为bind * 即可,这个属性和下面的protected-mode控制了是否可以远程访问 。 |
+| protected-mode | yes 、no                        | 保护模式，该模式控制外部网是否可以连接redis服务，默认是yes,所以默认我们外网是无法访问的，如需外网连接rendis服务则需要将此属性改为no。 |
+| timeout        | 300                             | 当客户端闲置多长时间后关闭连接，如果指定为 0，表示关闭该功能 |
+| loglevel       | debug、verbose、notice、warning | 日志级别，默认为 notice                                      |
+| databases      | 16                              | 设置数据库的数量，默认的数据库是0。整个通过客户端工具可以看得到 |
+| rdbcompression | yes、no                         | 指定存储至本地数据库时是否压缩数据，默认为 yes，Redis 采用 LZF 压缩，如果为了节省 CPU 时间，可以关闭该选项，但会导致数据库文件变的巨大。 |
+| dbfilename     | dump.rdb                        | 指定本地数据库文件名，默认值为 dump.rdb                      |
+| dir            |                                 | 指定本地数据库存放目录                                       |
+| requirepass    |                                 | 设置 Redis 连接密码，如果配置了连接密码，客户端在连接 Redis 时需要通过 AUTH <password> 命令提供密码，默认关闭 |
+| maxclients     | 0                               | 设置同一时间最大客户端连接数，默认无限制，Redis 可以同时打开的客户端连接数为 Redis 进程可以打开的最大文件描述符数，如果设置 maxclients 0，表示不作限制。当客户端连接数到达限制时，Redis 会关闭新的连接并向客户端返回 max number of clients reached 错误信息。 |
+| maxmemory      | XXX <bytes>                     | 指定 Redis 最大内存限制，Redis 在启动时会把数据加载到内存中，达到最大内存后，Redis 会先尝试清除已到期或即将到期的 Key，当此方法处理 后，仍然到达最大内存设置，将无法再进行写入操作，但仍然可以进行读取操作。Redis 新的 vm 机制，会把 Key 存放内存，Value 会存放在 swap 区。配置项值范围列里XXX为数值。 |
+
+这里我要将daemonize改为yes，不然我每次启动都得在redis-server命令后面加符号&，不这样操作则只要回到Linux控制台则redis服务会自动关闭，同时也将bind注释，将protected-mode设置为no。
+这样启动后我就可以在外网访问了。
+
+更改方式: 
+
+```
+vim /usr/local/redis/redis.conf
+```
+
+通过 /daemonize 查找到属性，默认是no，更改为yes即可。 (通过/关键字查找出现多个结果则使用 n字符切换到下一个即可，查找到结果后输入:noh退回到正常模式)
+
+如下图:
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213182746297-795629691.png)
+
+ 
+
+ 
+
+ 其他两个属性也是同样方式查找和编辑即可。
+
+###  查看Redis是否正在运行
+
+**1、采取查看进程方式**
+
+```
+ps -aux | grep redis
+```
+
+结果如下图：
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213183020720-1407665728.png)
+
+ 
+
+ 
+
+**2、采取端口监听查看方式**
+
+```
+netstat -lanp | grep 6379
+```
+
+结果如下图：
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213183227101-1025164897.png)
+
+ 
+
+ 
+
+### redis-cli
+
+`redis-cli`是连接本地redis服务的一个命令，通过该命令后可以既然怒redis的脚本控制台。如下图
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213183259305-1345838995.png)
+
+输入exit可以退出redis脚本控制台
+
+### 关闭运行中的Redis服务
+
+输入`redis-cli` 进入控制台后输入命令`shutdown`即可关闭运行中的Redis服务了。如下图:
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213183332038-1051623110.png)
+
+### 远程连接不上问题
+
+如下图，已经开放了Redis服务的ip不为127.0.0.1,理论上远程客户端应该可以连接了，而且云服务器的端口号也在安全组里开放了。
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213183452657-703255053.png)
+
+ 
+
+ 
+
+后面发现是启动命令的问题，因为我比较偷懒，启动redis我都是直接输入命令
+`redis-server` 或 `redis-server&` 这两种方式都是直接读取默认的配置文件启动，无非前者是显示启动后者是作为后台应用启动。我其实也很纳闷，因为我修改的就是默认的配置文件啊，我并没有重新生成新的配置文件，但是确实我输入命令 `redis-server /usr/local/redis/etc/redis.conf` 就是能成功，而且我输入命令`redis-server& /usr/local/redis/etc/redis.conf`也是远程登录失败。
+关于直接输入`redis-server`不行的问题我还怀疑是不是Linux缓存问题，我重启服务器尝试下。结果还是一样的。。。哎先不纠结了 后续再去找原因吧
+
+![img](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213183505517-1213430890.png)
+
+
+
+## 加载镜像
+
+查询官方镜像及其版本信息
+
+```shell
+$ docker search redis
+```
+
+加载最新镜像
+
+```shell
+$ docker pull redis:lastest
+```
+
+查看本地镜像
+
+```shell
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+docker.io/redis     latest              f0453552d7f2        7 days ago          98.2 MB
+docker.io/mysql     latest              9b51d9275906        2 weeks ago         547 MB
+docker.io/tomcat    latest              4e7840b49fad        3 weeks ago         529 MB
+```
+
+## 运行容器
+
+启用daemon
+
+```shell
+$ docker run --name redis -p 6380:6379 -d redis --requirepass "123456"
+```
+
+自定义redis.conf启动
+
+```shell
+docker run -p 6379:6379 --name redis -v /opt/conf/redis/redis.conf:/etc/redis/redis.conf  -v /opt/conf/redis/data:/data  -d redis redis-server /etc/redis/redis.conf  --appendonly yes --protected-mode no
+# -p 6379:6379:把容器内的6379端口映射到宿主机6379端口
+# -v /root/docker/redis/redis.conf:/etc/redis/redis.conf：把宿主机配置好的redis.conf放到容器内的这个位置中
+# -v /root/docker/redis/data:/data：把redis持久化的数据在宿主机内显示，做数据备份
+# redis-server /etc/redis/redis.conf：这个是关键配置，让redis不是无配置启动，而是按照这个redis.conf的配置启动
+# -appendonly yes：redis启动后数据持久化
+docker cp 70b3809bff11:/root/docker/redis/redis.conf /opt/conf/redis/redis.conf
+```
+
+查看运行状态
+
+```shell
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
+3c90175b38e6        redis               "docker-entrypoint..."   13 minutes ago      Up 13 minutes       0.0.0.0:6380->6379/tcp              kris-redis
+2bbd52391bab        mysql               "docker-entrypoint..."   7 days ago          Up 7 days           0.0.0.0:3306->3306/tcp, 33060/tcp   kris-mysql
+```
+
+启用redis-cli，即redis客户端
+
+```shell
+$ docker exec -it kris-redis redis-cli
+```
+
+
+
+# 运行springboot项目
+
+## 手动运行springboot项目
+
+### 1. 准备jar包
+
+在idea中，打开terminal，输入 `mvn clean package` 
+
+![image-20201128191723132](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128191723132.png)
+
+![image-20201128191846642](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128191846642.png)
+
+好了之后，我们拿到打包好的jar包
+
+![image-20201128191957869](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128191957869.png)
+
+如果我们不放心，可以在我们windows内 执行 java -jar 命令 看看在本地可不可以运行，可以就进入下一步
+
+![image-20201128192125078](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128192125078.png)
+
+访问接口，成功！
+
+![image-20201128192152270](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128192152270.png)
+
+> **思考：为什么springboot一般是打包成jar包，而不是war包？**
+>
+> 答：首先，`SpringBoot`应用是可以打包成`JAR`或者`WAR`形式的。但是官方文档推荐的是打包成`JAR`，作为一个`web应用`，为什么会推荐打包成`JAR`，这是因为`SpringBoot`内集成了`Tomcat`服务器，当你启动`SpringBoot`应用的时候，内置的`Tomcat`服务器就会启动，加载`web应用`。
+>
+> 其次，WAR包的启动需要`Tomcat`或者`Jetty`容器，这就在`SpringBoot`会引起`JAR`冲突，需要排除依赖，这样反而违背了`SpringBoot`简洁的特点。`JAR`包的启动入口就是`main函数`。
+
+### 2. 将jar包移入 linux系统内
+
+![image-20201128193145704](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128193145704.png)
+
+### 3. 利用java -jar 项目名 启动springboot项目
+
+![image-20201128193157830](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201128193157830.png)
+
+## dockerfile 运行springboot项目
+
+### 1. 准备jar包和jdk
+
+既然我们 单独的jdk 的dockerfile 和jar 在linux上运行 都成功了，这个只是将两个结合下，那就很easy啦
+
+在我们新建的目录下，放我们需要的的jdk和jar包
+
+![image-20201129180856060](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201129180856060.png)
+
+### 3. 编写dockerfile文件
+
+```dockerfile
+FROM centos
+
+MAINTAINER ggBall
+
+# 创建java目录
+RUN mkdir -p /usr/local/java/jdk
+# 创建jar包目录
+RUN mkdir -p /usr/local/java/jar
+
+# 添加并解压 jdk
+ADD jdk-8u201-linux-x64.tar.gz /usr/local/java/jdk
+
+
+# 设置jdk环境变量
+ENV JAVA_HOME /usr/local/java/jdk/jdk1.8.0_201
+ENV JRE_HOME ${JAVA_HOME}/jre
+ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib
+ENV PATH ${JAVA_HOME}/bin:$PATH
+
+# 将jar包添加到容器中并更名为app.jar
+ADD websockerdemo-0.0.1-SNAPSHOT.jar /usr/local/java/jar/app.jar
+# 容器运行时 执行的命令
+ENTRYPOINT  ["java","-jar","/usr/local/java/jar/app.jar"]
+# 或者将上面这句替换成下面这句
+# ENTRYPOINT ["nohup","java","-jar","/usr/local/java/jar/app.jar","&"]
+```
+
+**解释**
+
+```dockerfile
+1.nohup
+
+用途：不挂断地运行命令。
+
+语法：nohup Command [ Arg … ] [　& ]
+
+　　无论是否将 nohup 命令的输出重定向到终端，输出都将附加到当前目录的 nohup.out 文件中。
+
+　　如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME/nohup.out 文件中。
+
+　　如果没有文件能创建或打开以用于追加，那么 Command 参数指定的命令不可调用。
+
+退出状态：该命令返回下列出口值： 　　
+　　126 可以查找但不能调用 Command 参数指定的命令。 　　
+　　127 nohup 命令发生错误或不能查找由 Command 参数指定的命令。 　　
+　　否则，nohup 命令的退出状态是 Command 参数指定命令的退出状态。
+2.&
+
+用途：在后台运行
+
+一般两个一起用
+```
+
+
+
+### 3. 构建镜像
+
+```dockerfile
+docker build -f dockerfile -t docker_springboot:5.0 .
+```
+
+### 4. 运行镜像
+
+```dockerfile
+docker run -p 7002:8881 docker_springboot:5.0
+# 想后台运行 可以加上 -d 我这边只是测试下 就没加了
+```
+
+![image-20201129180420323](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201129180420323.png)
+
+访问成功！
+
+![成功界面](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20201129180401245.png)
+
+------
+
+
+
+# 对镜像操作
+
+
+
+## 对镜像删除的快捷操作
+
+```dockerfile
+// 停止状态为Exited的容器
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
+
+// 删除状态为Exited的容器
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
+
+// 删除 tag名称为none的image
+docker images|grep none|awk '{print $3 }'|xargs docker rmi -f
+docker rmi $(docker images|grep none|awk '{print $3 }')
+
+
+杀死所有正在运行的容器
+
+docker kill $(docker ps -a -q)
+
+删除所有已经停止的容器
+docker rm $(docker ps -a -q)
+
+删除所有未打 dangling 标签的镜像
+docker rmi $(docker images -q -f dangling=true)
+
+删除所有镜像
+docker rmi $(docker images -q)
+
+
+为这些命令创建别名
+
+# ~/.bash_aliases
+
+# 杀死所有正在运行的容器.
+alias dockerkill='docker kill $(docker ps -a -q)'
+
+# 删除所有已经停止的容器.
+alias dockercleanc='docker rm $(docker ps -a -q)'
+
+# 删除所有未打标签的镜像.
+alias dockercleani='docker rmi $(docker images -q -f dangling=true)'
+
+# 删除所有已经停止的容器和未打标签的镜像.
+alias dockerclean='dockercleanc || true && dockercleani'
+```
+
+# docker 操作
+
+停止所有正在运行的容器
+
+```
+docker stop $(docker ps -aq)
+```
+
+
+
+
+
+
+
+https://www.cnblogs.com/gcgc/p/10494615.html
+
+## 二、docker容器设置自动启动
+
+
+
+### 启动时加--restart=always
+
+```dockerfile
+docker run -tid --name isaler_v0.0.11 -p 8081:8080 --restart=always -v /alidata/iDocker/run/projectImages/isaler/v0.0.11/log:/usr/local/tomcat/logs isaler_v0.0.11
+
+
+Flag	Description
+no		不自动重启容器. (默认value)
+on-failure 	容器发生error而退出(容器退出状态不为0)重启容器
+unless-stopped 	在容器已经stop掉或Docker stoped/restarted的时候才重启容器
+always 	在容器已经stop掉或Docker stoped/restarted的时候才重启容器
+```
+
+
+
+### 如果已经过运行的项目
+
+```dockerfile
+如果已经启动的项目，则使用update更新：
+docker update --restart=always isaler_v0.0.11
+```
+
+### docker如何退出就删除容器
+
+#### 首先获取镜像
+
+```
+docker pull [选项] [Docker Registry地址]<仓库名>:<标签>
+```
+
+比如：
+
+```
+docker pull ubuntu:14.04
+```
+
+#### 运行
+
+```
+docker run -it --rm ubuntu:14.04 bash
+```
+
+参数说明：
+
+  docker run 就是运行容器的命令
+
+- ***\*-it\**** ：这是两个参数，一个是 -i ：交互式操作，一个是 -t 终端。我们 这里打算进入 bash 执行一些命令并查看返回结果，因此我们需要交互式终 端。
+- **--rm** ：这个参数是说容器退出后随之将其删除。默认情况下，为了排障需 求，退出的容器并不会立即删除，除非手动 docker rm， 我们这里只是随便 执行个命令，看看结果，不需要排障和保留结果，因此使用 --rm 可以避免 浪费空间。
+- **ubuntu:14.04** ：这是指用 ubuntu:14.04 镜像为基础来启动容器。
+- **bash** ：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的 是 bash 。
+
+
+
+### docker启动容器之后马上又自动关闭了
+
+### 问题现象：
+
+centos 启动一个容器添加了-d 参数，但是docker ps 或者docker ps -a查看却已经退出了
+shell>docker run -d centos
+a44b2b88559b68a2221c9574490a0e708bff49d88ca21f9e59d3eb245c7c0547
+shell>docker ps 
+![Docker容器一起动就退出的解决方案](D:\project\vscode\gitlab\blog\myBlog\docs\笔记\docker相关软件安装.assets\aHR0cHM6Ly9zMS41MWN0by5jb20vaW1hZ2VzL2Jsb2cvMjAxODEwLzE4LzJjYmUzMDk5ZTlhYzBjNWQxNWFmYzI4NTEyYTZhMzliLnBuZw)
+
+what ? why?
+
+### 退出原因
+
+1、docker容器运行必须有一个前台进程， 如果没有前台进程执行，容器认为空闲，就会自行退出
+2、容器运行的命令如果不是那些一直挂起的命令（ 运行top，tail、循环等），就是会自动退出
+3、这个是 docker 的机制问题
+
+### 解决方案
+
+方案1：
+网上有很多介绍，就是起一个死循环进程，让他不停的循环下去，前台永远有进程执行，那么容器就不会退出了,以centos为例
+shell>docker run -d centos /bin/sh -c "while true; do echo hello world; sleep 1; done"
+缺点： 命令太冗长了，还占用一个终端
+
+方案2：
+shell>docker run -dit centos /bin/bash
+添加-it 参数交互运行
+添加-d 参数后台运行
+这样就能启动一个一直停留在后台运行的Centos了。
+
+shell>docker ps 容器运行起来了
+![Docker容器一起动就退出的解决方案](D:\project\vscode\gitlab\blog\myBlog\docs\笔记\docker相关软件安装.assets\aHR0cHM6Ly9zMS41MWN0by5jb20vaW1hZ2VzL2Jsb2cvMjAxODEwLzE4LzJlZmJmYmU1YjA3YTkzNzE4YzU4MGE0Y2YwOWVhNTY1LnBuZw)
+
+### 进入容器的方法：
+
+使用exec，不要使用attach命令
+attach命令就是使用现有终端，如果你要退出容器操作，那么bash结束，容器也就退出了
+shell>docker exec -it <container_id> /bin/bash //新建一个bash
+![Docker容器一起动就退出的解决方案](D:\project\vscode\gitlab\blog\myBlog\docs\笔记\docker相关软件安装.assets\aHR0cHM6Ly9zMS41MWN0by5jb20vaW1hZ2VzL2Jsb2cvMjAxODEwLzE4LzI5MzdkY2M1NjNlYWRiYTE2YjFkYmQzMjJjM2FlOTNlLnBuZw)
+
+# [vim全选，全部复制，全部删除](https://www.cnblogs.com/zhangrui153169/p/12674984.html)
+
+ 
+
+```
+全选（高亮显示）：按esc后，然后ggvG或者ggVG
+
+全部复制：按esc后，然后ggyG
+
+全部删除：按esc后，然后dG
+```
+
+
+
+解析：
+
+**gg：**是让光标移到首行，在**vim**才有效，vi中无效 
+
+**v ：** 是进入Visual(可视）模式 
+
+**G ：**光标移到最后一行 
+
+**选**中内容以后就可以其他的操作了，比如： 
+**d** 删除**选**中内容 
+**y** 复制**选**中内容到0号寄存器 
+**"+y** 复制**选**中内容到＋寄存器，也就是系统的剪贴板，供其他程序用 

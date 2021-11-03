@@ -1,0 +1,209 @@
+---
+title: springboot三种系统初始化方式解析
+date: 2021-01-30 00:00:00
+tags: 
+  - java
+categories: 
+  - 笔记
+permalink: /pages/a6c028/
+---
+
+# springboot三种系统初始化方式解析
+
+## 1. 第一种 利用 spring.factories
+
+> 在资源文件目录建立 spring.factories 文件 存入key-value信息
+>
+> ```properties
+> org.springframework.context.ApplicationContextInitializer=com.zhu.ggball.springboot.initializer.FirstInitializer
+> ```
+
+![image-20210118213956051](D:\project\vscode\gitlab\blog\myBlog\docs\笔记\springboot三种系统初始化方式解析.assets\image-20210118213956051.png)
+
+实现 ApplicationContextInitializer 类
+
+```java
+/**
+ * @program: springboot
+ * @description: 第一种初始化方式
+ * @author: ggBall
+ * @create: 2021-01-13 09:16
+ **/
+@Order(1)
+public class FirstInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        // 1. 获取环境
+        ConfigurableEnvironment environment = applicationContext.getEnvironment();
+        // 2. 构建自己的属性
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("key1","value1");
+        MapPropertySource source = new MapPropertySource("firstInitializer", map);
+        // 3. 加入环境属性集中
+        environment.getPropertySources().addLast(source);
+
+        System.out.println("firstInitializer start... ");
+    }
+}
+
+```
+
+原理：
+
+启动类 run方法 执行 SpringApplication 构造函数
+
+```java
+/**
+	 * Create a new {@link SpringApplication} instance. The application context will load
+	 * beans from the specified primary sources (see {@link SpringApplication class-level}
+	 * documentation for details. The instance can be customized before calling
+	 * {@link #run(String...)}.
+	 * @param resourceLoader the resource loader to use
+	 * @param primarySources the primary bean sources
+	 * @see #run(Class, String[])
+	 * @see #setSources(Set)
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
+		this.resourceLoader = resourceLoader;
+		Assert.notNull(primarySources, "PrimarySources must not be null");
+		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
+		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+		this.bootstrappers = new ArrayList<>(getSpringFactoriesInstances(Bootstrapper.class));
+        // 设置初始化器
+		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+		this.mainApplicationClass = deduceMainApplicationClass();
+	}
+```
+
+获取spring工厂实例对象
+
+```java
+	private <T> Collection<T> getSpringFactoriesInstances(Class<T> type, Class<?>[] parameterTypes, Object... args) {
+        // 获得 类加载器
+		ClassLoader classLoader = getClassLoader();
+		// Use names and ensure unique to protect against duplicates
+        // 获取 spring.factories key-value对象 存入缓存中
+		Set<String> names = new LinkedHashSet<>(SpringFactoriesLoader.loadFactoryNames(type, classLoader));
+        // 实例化对象
+		List<T> instances = createSpringFactoriesInstances(type, parameterTypes, classLoader, args, names);
+        // 根据@Order的value值 排序 越小越靠前
+		AnnotationAwareOrderComparator.sort(instances);
+		return instances;
+	}
+```
+
+```java
+// 创建实例化对象
+private <T> List<T> createSpringFactoriesInstances(Class<T> type, Class<?>[] parameterTypes,
+			ClassLoader classLoader, Object[] args, Set<String> names) {
+		List<T> instances = new ArrayList<>(names.size());
+		for (String name : names) {
+			try {
+				Class<?> instanceClass = ClassUtils.forName(name, classLoader);
+				Assert.isAssignable(type, instanceClass);
+				Constructor<?> constructor = instanceClass.getDeclaredConstructor(parameterTypes);
+				T instance = (T) BeanUtils.instantiateClass(constructor, args);
+				instances.add(instance);
+			}
+			catch (Throwable ex) {
+				throw new IllegalArgumentException("Cannot instantiate " + type + " : " + name, ex);
+			}
+		}
+		return instances;
+	}
+```
+
+
+
+## 2. 第二种 改变启动类方式
+
+改变启动类方式
+
+```java
+@SpringBootApplication
+public class GgballSpringbootInitializerApplication {
+
+    public static void main(String[] args) {
+
+        // 第一种系统初始化方式
+         SpringApplication.run(GgballSpringbootInitializerApplication.class, args);
+
+        // 第二种初始化系统方式
+//        SpringApplication application = new SpringApplication(GgballSpringbootInitializerApplication.class);
+//        SecondInitializer secondInitializer = new SecondInitializer();
+//        application.addInitializers(secondInitializer);
+//
+//        application.run(args);
+    }
+
+}
+```
+
+实现 ApplicationContextInitializer 类
+
+```java
+/**
+ * @program: springboot
+ * @description: 第二种初始化方式
+ * @author: ggBall
+ * @create: 2021-01-14 09:17
+ **/
+// @Order Spring IOC容器中Bean的执行顺序的优先级
+@Order(2)
+public class SecondInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    @Override
+    public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+        // 1. 获取环境
+        ConfigurableEnvironment environment = configurableApplicationContext.getEnvironment();
+        // 2. 准备资源map
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("key2","value2");
+        MapPropertySource source = new MapPropertySource("secondInitializer", map);
+        // 3. 填入环境
+        environment.getPropertySources().addLast(source);
+
+        System.out.println("SecondInitializer ... ");
+    }
+}
+
+```
+
+## 3. 第三种 利用 application.properties
+
+利用 application.properties 添加 
+
+```properties
+context.initializer.classes=com.zhu.ggball.springboot.initializer.ThirdInitializer
+
+```
+
+```
+实现 ApplicationContextInitializer 类
+/**
+ * @program: springboot
+ * @description: 第三种初始化方式
+ * @author: ggBall
+ * @create: 2021-01-14 09:17
+ **/
+// @Order Spring IOC容器中Bean的执行顺序的优先级 默认是最低优先级,值越小优先级越高
+@Order(3)
+public class ThirdInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    @Override
+    public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+        // 1. 获取环境
+        ConfigurableEnvironment environment = configurableApplicationContext.getEnvironment();
+        // 2. 准备资源map
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("key3","value3");
+        MapPropertySource source = new MapPropertySource("thirdInitializer", map);
+        // 3. 填入环境
+        environment.getPropertySources().addLast(source);
+
+        System.out.println("thirdInitializer start ... ");
+    }
+}
+
+```
+

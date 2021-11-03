@@ -1,0 +1,142 @@
+---
+title: git本地上传项目
+date: 2021-10-08 19:46:04
+permalink: /pages/77be14/
+categories:
+  - 笔记
+  - git
+tags:
+  - 
+---
+# [使用git将本地项目上传至git仓库](https://www.cnblogs.com/fanwenhao/p/10841133.html)
+
+
+
+
+## 介绍
+
+一般来说开发过程中都是先在git创建远程仓库，然后fetch到本地仓库，再进行commit push等操作，但是有时候也需要将本地已经开发的项目上传至一个空的远程仓库中，期间也是遇到不少问题，特此总结一下
+
+## 初始化本地仓库
+
+初始化仓库
+
+```
+git init
+```
+
+将文件提交至本地仓库
+
+```
+git commit -m "注释"
+```
+
+## 关联线上仓库
+
+```
+git remote add origin <线上仓库url>
+```
+
+线上仓库url 为如下链接
+
+https://github.com/wenhaofan/xxx.git
+
+## 提交代码
+
+###   常见错误及解决方案
+
+​        现在已经创建好了本地仓库，并关联上了远程仓库，如果我们直接使用git push -u origin master将本地内容推送至线上那么可能会出现出现以下错误
+
+####     git push
+
+```
+failed to push some refs to 'https://github.com/xxx/xxx.git'
+hint: Updates were rejected because the remote contains work that you dogit
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+
+​    以上错误很明显的提示先执行 git pull 再push,需要先执行以下指令将远程仓库中master分支中的文件拉取到本地
+
+```
+git pull origin master
+```
+
+​    如果没有抛异常 那么就可以愉快的再次执行 git push 了，如果抛了异常，那么可以接着往下看
+
+####     git pull
+
+```
+ * branch            master     -> FETCH_HEAD
+fatal: refusing to merge unrelated histories
+```
+
+​    出现这个问题是因为本地库和远程库没有进行关联远， 然后本地推送到远程库， 远端因为这个本地库跟自己没有关联， 所以告知无法合并，该情况有两种解决方法
+
+​    第一种：	
+
+​    先从远端库拉下来代码，然后将本地代码放入本地库中， 然后再执行push提交上去 
+
+​    第二种方法：
+
+​    使用以下命令,把两段不相干的 分支进行强行合并
+
+```
+git pull origin master --allow-unrelated-histories
+```
+
+​    然后再进行提交
+
+```
+git push gitlab master:init
+```
+
+
+
+
+
+注意： 项目 要添加 成员 和 提交的 分支不是保护分支
+
+![image-20210130182839857](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20210130182839857.png)
+
+![image-20210130182907475](https://gitee.com/zxqzhuzhu/imgs/raw/master/image-20210130182907475.png)
+
+
+
+## 一、提交代码
+
+1、先去github创建一个仓库（Repositories），得到这个仓库地址，如:https://github.com/xxxx/htmlDemo.git
+
+2、在要上传的文件夹里面打开gitbash，按顺序执行
+
+```
+① git init
+
+② git add .
+
+③ git commit -m ‘备注信息’
+
+④ git remote add origin https://github.com/xxxx/htmlDemo.git
+
+⑤ git push -u origin master
+```
+
+链接：[link] (https://www.csdn.net/)
+
+## 二、更新代码
+
+```
+① git pull origin master
+
+② git status
+
+③ git add .
+
+④ git commit -m ‘备注信息’
+
+⑤ git push -u origin master
+```
+
+

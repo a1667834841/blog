@@ -1,0 +1,178 @@
+---
+title: openFeign超时配置
+date: 2021-10-08 19:46:04
+permalink: /pages/5c077d/
+categories:
+  - 笔记
+  - java
+  - springCloud
+  - 远程调用
+tags:
+  - 
+---
+# openFeign超时时间配置
+
+一开始我把 feign和openFeign搞混了，所以还是先记录下下面三种feign的区别吧
+
+```maven
+<!-- https://mvnrepository.com/artifact/com.netflix.feign/feign-core -->
+<dependency>
+    <groupId>com.netflix.feign</groupId>
+    <artifactId>feign-core</artifactId>
+    <version>8.18.0</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-core -->
+<!-- https://github.com/OpenFeign/feign -->
+<dependency>
+    <groupId>io.github.openfeign</groupId>
+    <artifactId>feign-core</artifactId>
+    <version>10.5.1</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign -->
+<!-- https://spring.io/projects/spring-cloud-openfeign -->
+<!-- https://github.com/spring-cloud/spring-cloud-openfeign -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-openfeign</artifactId>
+    <version>2.1.2.RELEASE</version>
+</dependency>
+
+```
+
+1. `com.netflix.feign`是Netflix 公司开源产品，2018年宣布停止维护。 改由开源社区进行维护，修改了组织归属为OpenFeign，并调整代码仓库到[OpenFeign/feign](https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2FOpenFeign%2Ffeign)（可以简单理解为换了个仓库地址，换了一批人继续更新维护）。
+
+2. `spring-cloud-starter-openfeign`是Spring Cloud在Feign的基础上支持了SpringMVC的注解，如@RequestMapping等等。Spring Cloud OpenFeign的@FeignClient可以解析SpringMVC的@RequestMapping注解下的接口，并通过动态代理的方式产生实现类，实现类中。
+
+   Spring Cloud OpenFeign 是声明式的服务调用工具，它整合了 Ribbon（负载均衡） 和 Hystrix（熔断、降级），拥有负载均衡和服务容错功能。默认是采用java.net.HttpURLConnection，每次请求都会建立、关闭连接，为了性能考虑，可以引入httpclient、okhttp作为底层的通信框架。
+
+> 为什么要记录这个问题呢，因为之前项目feign调用接口出现了超时问题，自己不知道咋解决，所以记录下
+
+
+
+首先先来个例子,一共有三个服务
+
+- 服务eureka-sever
+- 服务cilent-a
+- 服务调用方 feign
+
+![image-20210830145533610](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830145533610.png)
+
+https://www.processon.com/view/link/612c81dfe0b34d3550f3ef18
+
+![image-20210830150040249](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830150040249.png)
+
+1. 服务client-a提供一个接口，给调用方feign调用
+
+```java
+@RestController
+public class ClientAController {
+
+    @Value("${server.port}")
+    String port;
+
+    @RequestMapping("/hi")
+    public String home(@RequestParam String name) throws InterruptedException {
+        return "hi " + name + ",i am from port:" + port;
+    }
+
+}
+```
+
+2. 调用方调用client-a接口
+
+```java
+/**
+ * @program: spring_cloud_demo
+ * @description:
+ * @author: ggBall
+ * @create: 2020-09-14 15:46
+ **/
+@RestController
+public class ServerHiController {
+
+    @Autowired
+    ServerHi serverHi;
+    @GetMapping("/hi")
+    public String sayHi(String name){
+        return serverHi.sayHiFromClientOne(name);
+    }
+
+}
+
+/**
+ *feign接口
+*/
+@FeignClient("clientA")
+public interface ServerHi {
+    @RequestMapping(value = "/hi", method = RequestMethod.GET)
+    String sayHiFromClientOne(@RequestParam(value = "name") String name);
+}
+
+
+```
+
+调用者application.yml
+
+```yml
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8765
+spring:
+  application:
+    name: service-feign
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+        retryer: com.zhu.feign.config.MyRetryer #Feign使用默认的超时配置，在该类源码中可见，默认单次请求最大时长1秒，重试5次
+
+ribbon:
+  ReadTimeout: 5000  #处理请求的超时时间，默认为1秒
+  ConnectTimeout: 10000 #连接建立的超时时长，默认1秒
+
+```
+
+
+
+3. 本地启动，浏览器调用`http://127.0.0.1:8765/hi?name=11` 接口，开始debug
+
+![image-20210830150630038](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830150630038.png)
+
+往里面debug，进入invoke()方法
+
+![image-20210830150705369](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830150705369.png)
+
+![image-20210830150840766](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830150840766.png)
+
+​		Options这个对象是设置当前client的属性的一个实例，一些`connectTimeout`,`readTimeout`都是在这里面的，接着看findOptions()方法
+
+![image-20210830154216606](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830154216606.png)
+
+​		`	argv` 为请求url上的参数值，如果argv的值为空或者元素为0,则返回自身的options，我们可以看到options的connectTimeout和配置的相同，说明默认为feign的配置
+
+![image-20210830155824168](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830155824168.png)
+
+client(有可能是httpClient和okHttp)开始执行远程调用
+
+![image-20210830160003826](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830160003826.png)
+
+​		根据客户端名称和options获取client配置
+
+![image-20210830160356357](https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20210830160356357.png)
+
+​		如果传入的options不等于DEFAULT_OPTIONS，则使用feign配置，反之，则使用被调用方的ribbon配置,所以如果配置了feign配置，优先使用feign的配置，反之则使用 ribbon配置（ribbon默认超时时间为1s）
+
+
+
+>  **注意**：hystrix的熔断时间配置通过yml配置没法生效，可以通过配置类的方法来修改
+
+
+
+**结论：如果配置了feign配置，优先使用feign的配置，反之则使用 ribbon配置（ribbon默认超时时间为1s）**
