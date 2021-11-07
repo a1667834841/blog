@@ -17,7 +17,7 @@ git config --global user.email "167834841@qq.com"
 git init
 git add -A
 git commit -m "本地"
-git remote add origin https://github.com/a1667834841/blog.git
+git remote add origin https://a1667834841:a13014483325@github.com/a1667834841/blog.git
 git push -f https://github.com/a1667834841/blog.git master:gh-pages  # 推送到github page分支
 
 echo '成功提交'
