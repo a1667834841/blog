@@ -10,7 +10,7 @@ npm run build
 cd docs/.vuepress/dist
 
 # deploy to github pages
-echo 'ggball.top' > CNAME
+echo 'www.ggball.top' > CNAME
 
 if [ -z "$GITHUB_TOKEN" ]; then
   msg='deploy'
@@ -24,6 +24,7 @@ fi
 git init
 git add -A
 git commit -m "${msg}"
+git remote add origin https://github.com/a1667834841/blog.git
 git push -f $githubUrl master:gh-pages # 推送到github gh-pages分支
 
 # deploy to coding pages
