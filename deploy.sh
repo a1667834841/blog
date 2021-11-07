@@ -9,8 +9,8 @@ npm run build
 cd docs/.vuepress/dist
 
 # deploy to github pages
-echo 'blog.ggball.top' > CNAME
-echo $GITHUB_TOKEN
+# echo 'blog.ggball.top' > CNAME
+
 if [ -z "$GITHUB_TOKEN" ]; then
   msg='deploy'
   githubUrl=git@github.com/a1667834841/blog.git
