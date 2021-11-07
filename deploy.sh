@@ -26,7 +26,6 @@ fi
 git init
 git add -A
 git commit -m "${msg}"
-git remote add origin https://a1667834841:a13014483325@github.com/a1667834841/blog.git
 git push -f $githubUrl master:gh-pages # 推送到github gh-pages分支
 
 # deploy to coding pages
