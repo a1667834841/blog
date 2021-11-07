@@ -10,16 +10,16 @@ npm run build
 cd docs/.vuepress/dist
 
 # deploy to github pages
-echo 'www.ggball.top' > CNAME
+echo 'blog.ggball.top' > CNAME
 echo $GITHUB_TOKEN
 if [ -z "$GITHUB_TOKEN" ]; then
   msg='deploy'
-  githubUrl=https://a1667834841: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@github.com/a1667834841/blog.git
+  githubUrl=git@github.com/a1667834841/blog.git
   git config --global user.name "a1667834841"
   git config --global user.email "1667834841@qq.com"
 else
   msg='来自github actions的自动部署'
-  githubUrl=https://a1667834841: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@github.com/a1667834841/blog.git
+  githubUrl=https://a1667834841:${GITHUB_TOKEN}@github.com/a1667834841/blog.git
   git config --global user.name "a1667834841"
   git config --global user.email "1667834841@qq.com"
 fi
