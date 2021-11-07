@@ -14,12 +14,12 @@ echo 'www.ggball.top' > CNAME
 echo $GITHUB_TOKEN
 if [ -z "$GITHUB_TOKEN" ]; then
   msg='deploy'
-  githubUrl=https://a1667834841:a13014483325@github.com/a1667834841/blog.git
+  githubUrl=https://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@github.com/a1667834841/blog.git
   git config --global user.name "a1667834841"
   git config --global user.email "1667834841@qq.com"
 else
   msg='来自github actions的自动部署'
-  githubUrl=https://a1667834841:a13014483325@github.com/a1667834841/blog.git
+  githubUrl=https://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@github.com/a1667834841/blog.git
   git config --global user.name "a1667834841"
   git config --global user.email "1667834841@qq.com"
 fi
