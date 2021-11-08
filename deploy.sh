@@ -44,9 +44,8 @@ fi
 
 git init
 git add -A
-git commit -m "conding测试"
-git remote set-url origin https://e.coding.net/ggball/personal/blog.git
-git push origin -f master 
+git commit -m "${msg}"
+git push -f $codingUrl master # 推送到coding
 
 cd -
 rm -rf docs/.vuepress/dist
