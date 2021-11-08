@@ -45,7 +45,7 @@ fi
 git init
 git add -A
 git commit -m "conding测试"
-git remote add origin https://e.coding.net/ggball/personal/blog.git
+git remote set-url origin https://e.coding.net/ggball/personal/blog.git
 git push origin -f master 
 
 cd -
