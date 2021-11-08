@@ -20,8 +20,12 @@ git commit -m "本地"
 git remote add origin https://github.com/a1667834841/blog.git
 git push -f https://github.com/a1667834841/blog.git master:gh-pages  # 推送到github page分支
 
+git init
 git add -A
 git commit -m "conding测试"
-git push -f https://bSjYQdAhrG:9d5dfb3e3df15ff28f60ea65270ff3243d0f505c@e.coding.net/personal/blog.git master # 推送到coding
+git remote add origin https://e.coding.net/ggball/personal/blog.git
+git push origin -f master 
+
+ https://bSjYQdAhrG:9d5dfb3e3df15ff28f60ea65270ff3243d0f505c@e.coding.net/personal/blog.git
 
 echo '成功提交'
