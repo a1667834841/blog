@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>springboot 深入解析 监听器 | ggball&#39;s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="web前端技术博客,简洁至上,专注web前端学习与总结。JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github等技术文章。">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.546f0649.css" as="style"><link rel="preload" href="/assets/js/app.95ea1b46.js" as="script"><link rel="preload" href="/assets/js/2.7aad6904.js" as="script"><link rel="preload" href="/assets/js/31.c0ca2707.js" as="script"><link rel="prefetch" href="/assets/js/10.7b6ca3bd.js"><link rel="prefetch" href="/assets/js/11.349e89cb.js"><link rel="prefetch" href="/assets/js/12.fb8a8f6b.js"><link rel="prefetch" href="/assets/js/13.8e50a6ac.js"><link rel="prefetch" href="/assets/js/14.d42bf284.js"><link rel="prefetch" href="/assets/js/15.86a5c45e.js"><link rel="prefetch" href="/assets/js/16.402416c8.js"><link rel="prefetch" href="/assets/js/17.c48aeef9.js"><link rel="prefetch" href="/assets/js/18.94a4c1f2.js"><link rel="prefetch" href="/assets/js/19.30de71eb.js"><link rel="prefetch" href="/assets/js/20.f459290d.js"><link rel="prefetch" href="/assets/js/21.05e03364.js"><link rel="prefetch" href="/assets/js/22.b11d7ccc.js"><link rel="prefetch" href="/assets/js/23.a57536de.js"><link rel="prefetch" href="/assets/js/24.765f1e3a.js"><link rel="prefetch" href="/assets/js/25.b17a2ed7.js"><link rel="prefetch" href="/assets/js/26.d29d6a5a.js"><link rel="prefetch" href="/assets/js/27.c407ba19.js"><link rel="prefetch" href="/assets/js/28.6bdeda45.js"><link rel="prefetch" href="/assets/js/29.c1cd6f32.js"><link rel="prefetch" href="/assets/js/3.e29d11dc.js"><link rel="prefetch" href="/assets/js/30.4c89653d.js"><link rel="prefetch" href="/assets/js/32.1cdf46d5.js"><link rel="prefetch" href="/assets/js/33.9e857c62.js"><link rel="prefetch" href="/assets/js/34.a2b878fd.js"><link rel="prefetch" href="/assets/js/35.6639fbd1.js"><link rel="prefetch" href="/assets/js/36.150dc4d7.js"><link rel="prefetch" href="/assets/js/37.3c78e0d6.js"><link rel="prefetch" href="/assets/js/38.3c69bd71.js"><link rel="prefetch" href="/assets/js/39.2f012fc9.js"><link rel="prefetch" href="/assets/js/4.523f8496.js"><link rel="prefetch" href="/assets/js/40.d78539f8.js"><link rel="prefetch" href="/assets/js/41.ee5f3a51.js"><link rel="prefetch" href="/assets/js/42.030189a4.js"><link rel="prefetch" href="/assets/js/43.4fe8b35a.js"><link rel="prefetch" href="/assets/js/44.779a4c58.js"><link rel="prefetch" href="/assets/js/45.0312c23c.js"><link rel="prefetch" href="/assets/js/46.faa2462a.js"><link rel="prefetch" href="/assets/js/47.74766e8f.js"><link rel="prefetch" href="/assets/js/48.4f9f0df3.js"><link rel="prefetch" href="/assets/js/49.7ac274dc.js"><link rel="prefetch" href="/assets/js/5.0c8b3603.js"><link rel="prefetch" href="/assets/js/50.81e1d9be.js"><link rel="prefetch" href="/assets/js/51.3e787112.js"><link rel="prefetch" href="/assets/js/52.020470a2.js"><link rel="prefetch" href="/assets/js/53.b5a6f073.js"><link rel="prefetch" href="/assets/js/54.9a278697.js"><link rel="prefetch" href="/assets/js/55.f8fdfca4.js"><link rel="prefetch" href="/assets/js/56.61a6f01c.js"><link rel="prefetch" href="/assets/js/57.00f11804.js"><link rel="prefetch" href="/assets/js/58.e6802e35.js"><link rel="prefetch" href="/assets/js/59.7c2fc506.js"><link rel="prefetch" href="/assets/js/6.9521fa13.js"><link rel="prefetch" href="/assets/js/60.b9ea47b7.js"><link rel="prefetch" href="/assets/js/61.efb68481.js"><link rel="prefetch" href="/assets/js/62.226aae7a.js"><link rel="prefetch" href="/assets/js/63.791adcd0.js"><link rel="prefetch" href="/assets/js/64.c40bad66.js"><link rel="prefetch" href="/assets/js/65.73b5612a.js"><link rel="prefetch" href="/assets/js/66.e4de4687.js"><link rel="prefetch" href="/assets/js/67.075d6c60.js"><link rel="prefetch" href="/assets/js/68.2f3abb0f.js"><link rel="prefetch" href="/assets/js/69.699d31d3.js"><link rel="prefetch" href="/assets/js/7.6438b051.js"><link rel="prefetch" href="/assets/js/70.059f60c4.js"><link rel="prefetch" href="/assets/js/71.5ea2354c.js"><link rel="prefetch" href="/assets/js/72.d41c1cfc.js"><link rel="prefetch" href="/assets/js/73.074dc8ac.js"><link rel="prefetch" href="/assets/js/74.2d94a282.js"><link rel="prefetch" href="/assets/js/75.81615dd5.js"><link rel="prefetch" href="/assets/js/76.2aad8fb3.js"><link rel="prefetch" href="/assets/js/77.3b83b669.js"><link rel="prefetch" href="/assets/js/78.105b6fe4.js"><link rel="prefetch" href="/assets/js/79.ab86a644.js"><link rel="prefetch" href="/assets/js/8.1764c94c.js"><link rel="prefetch" href="/assets/js/80.5169d9cc.js"><link rel="prefetch" href="/assets/js/81.7d6ca25c.js"><link rel="prefetch" href="/assets/js/82.cecf9f76.js"><link rel="prefetch" href="/assets/js/83.06437b38.js"><link rel="prefetch" href="/assets/js/84.14173b8d.js"><link rel="prefetch" href="/assets/js/85.bf140d48.js"><link rel="prefetch" href="/assets/js/86.511bafc3.js"><link rel="prefetch" href="/assets/js/87.de833165.js"><link rel="prefetch" href="/assets/js/88.fe16eb97.js"><link rel="prefetch" href="/assets/js/89.b2894703.js"><link rel="prefetch" href="/assets/js/9.e10d4737.js"><link rel="prefetch" href="/assets/js/90.531bbb8a.js"><link rel="prefetch" href="/assets/js/91.1ce6911e.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.546f0649.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu have-body-img"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/EB-logo.png" alt="ggball's blog" class="logo"> <span class="site-name can-hide">ggball's blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="笔记" class="dropdown-title"><a href="/pages/" class="link-title router-link-active">笔记</a> <span class="title" style="display:none;">笔记</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>面试</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/2ace5b/" class="nav-link">河狸家</a></li></ul></li><li class="dropdown-item"><h4>docker</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/e23d09/" class="nav-link">docker使服务器硬盘挤满</a></li><li class="dropdown-subitem"><a href="/pages/401855/" class="nav-link">docker 安装相关操作</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="工具书" class="dropdown-title"><!----> <span class="title" style="display:;">工具书</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/9bf756/" class="nav-link">操作手册</a></li><li class="dropdown-item"><!----> <a href="/pages/0bb660/" class="nav-link">数据库</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="更多" class="dropdown-title"><a href="/more/" class="link-title">更多</a> <span class="title" style="display:none;">更多</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/f2a556/" class="nav-link">学习</a></li><li class="dropdown-item"><!----> <a href="/pages/aea6571b7a8bae86/" class="nav-link">面试</a></li><li class="dropdown-item"><!----> <a href="/pages/2d615df9a36a98ed/" class="nav-link">心情杂货</a></li><li class="dropdown-item"><!----> <a href="/pages/baaa02/" class="nav-link">实用技巧</a></li><li class="dropdown-item"><!----> <a href="/friends/" class="nav-link">友情链接</a></li></ul></div></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="https://cdn.jsdelivr.net/gh/xugaoyi/image_store/blog/20200103123203.jpg"> <div class="blogger-info"><h3>ggball</h3> <span>后端界的小学生</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="笔记" class="dropdown-title"><a href="/pages/" class="link-title router-link-active">笔记</a> <span class="title" style="display:none;">笔记</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>面试</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/2ace5b/" class="nav-link">河狸家</a></li></ul></li><li class="dropdown-item"><h4>docker</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/e23d09/" class="nav-link">docker使服务器硬盘挤满</a></li><li class="dropdown-subitem"><a href="/pages/401855/" class="nav-link">docker 安装相关操作</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="工具书" class="dropdown-title"><!----> <span class="title" style="display:;">工具书</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/9bf756/" class="nav-link">操作手册</a></li><li class="dropdown-item"><!----> <a href="/pages/0bb660/" class="nav-link">数据库</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="更多" class="dropdown-title"><a href="/more/" class="link-title">更多</a> <span class="title" style="display:none;">更多</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/f2a556/" class="nav-link">学习</a></li><li class="dropdown-item"><!----> <a href="/pages/aea6571b7a8bae86/" class="nav-link">面试</a></li><li class="dropdown-item"><!----> <a href="/pages/2d615df9a36a98ed/" class="nav-link">心情杂货</a></li><li class="dropdown-item"><!----> <a href="/pages/baaa02/" class="nav-link">实用技巧</a></li><li class="dropdown-item"><!----> <a href="/friends/" class="nav-link">友情链接</a></li></ul></div></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>面试</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>数据库</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>docker</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>git</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>java</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>jvm</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>maven</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>mybatis</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>spring</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>springboot</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/de20ba/" aria-current="page" class="active sidebar-link">springboot 深入解析 监听器</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/de20ba/#一、监听器模式介绍" class="sidebar-link">一、监听器模式介绍</a></li><li class="sidebar-sub-header"><a href="/pages/de20ba/#二、系统监听器介绍" class="sidebar-link">二、系统监听器介绍</a></li><li class="sidebar-sub-header"><a href="/pages/de20ba/#三-监听事件触发机制" class="sidebar-link">三：监听事件触发机制</a></li><li class="sidebar-sub-header"><a href="/pages/de20ba/#四-自定义监听器" class="sidebar-link">四：自定义监听器</a></li></ul></li><li><a href="/pages/b0c93f/" class="sidebar-link">SpringBoot 在IDEA中实现热部署 (JRebel实用版)</a></li><li><a href="/pages/a6c028/" class="sidebar-link">springboot三种系统初始化方式解析</a></li></ul></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>springCloud</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>tomcat如何工作</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>多线程</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>java基础</span> <span class="arrow right"></span></p> <!----></section></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>linux</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>node</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>tensorFlow</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>网络</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>中间件</span> <span class="arrow right"></span></p> <!----></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-1cd794fe><div class="articleInfo" data-v-1cd794fe><ul class="breadcrumbs" data-v-1cd794fe><li data-v-1cd794fe><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-1cd794fe></a></li> <li data-v-1cd794fe><a href="/categories/?category=%E7%AC%94%E8%AE%B0" title="分类" data-v-1cd794fe>笔记</a></li> <li data-v-1cd794fe><a href="/categories/?category=java" title="分类" data-v-1cd794fe>java</a></li> <li data-v-1cd794fe><a href="/categories/?category=springboot" title="分类" data-v-1cd794fe>springboot</a></li></ul> <div class="info" data-v-1cd794fe><div title="作者" class="author iconfont icon-touxiang" data-v-1cd794fe><a href="https://github.com/a1667834841" target="_blank" title="作者" class="beLink" data-v-1cd794fe>ggball</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-1cd794fe><a href="javascript:;" data-v-1cd794fe>2021-01-31</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABKFJREFUSA3tVl1oFVcQnrMbrak3QUgkya1akpJYcrUtIqW1JvFBE9LiQ5v6JmJpolbMg32rVrhgoYK0QiMY6i9Y6EMaW5D+xFJaTYItIuK2Kr3+BJNwkxBj05sQY3b3nM6cs2dv9t7NT/vQJw/sndk5M/PNzJkzewGerP+pAmy+ON8lLzUJgA8ZYxYIYZmGYRnctDaWvJJAmTtfP1pvXsBCCPP8QFcCaRkZYACgDZFO4stNIcBCajEOlmmC9XpJ9bAGCaPaPmzPl32dvLSVu3BWCTQs0XQQ6g0DYgwLIoAZbBCdW/i+781o1VVlm/410mw4h06Y7bIPHNyWDyL4FHkX03Q8SrzNhZTZriieckWt7cL6MM85YcLpsi/7O9/iXFT6MswI0DmmpkSaJ0qLxFIm3+i1THHB3zmBH3PYx9CcykcLOeQVVa7QtdxTgQgEleX2AjHYfwA+2ddV77ruGoJUbhGDI09YSNXyMpUt5ylOzxgbUmtOp7NmbNt8v3arjTBfYELmLUV+M+nSawNNAUqpT3ClJWg5I3BLT+cGW/DXNGCa6tx1aakCGEigArTn4TDIPdrXXYKCZNrHLMCOEPvHBlLQ99s9eHB7EB6NTki73CVPQ2F5MSx/uRQixfmq7rK0wYD8w8E905bnPDfwoWs/rfv93NWN/ZfvwsLIU7A09gxECyISeGJkHAau98L97tuw7NXnoPyNF8FcYGLGKsOs0mN3OEyec9esGW/ZEl945dTP34wlR2FZVQWU1q0Cw8Tr7p+hgLLNL0FPxx/Q35mA8aEUrH6nCgwEl0tn7wUiZYJnNRh6DK4UH/k0lfyrsBKdPVv/AriGIQcEDQZ65LBAGe2Rzui9Ybjz7XUppz1/uKBbyVPGkN3ZAeC6hr0x7Nr38N5+EqkoOm17xpoqR9ohQF55ERSvr4Dkr3chNfC3DMzGJlNBElW8w9nsGQvhNGIzDkXzCg8cLK951xHsFBlTJspJNi3ZFIMF2AeDV3q8DNOB+YHi6QTrChDIWDBRi5U5f+ZMfJLu3ccrqxtdxk4SKH336LFxSmkqefwU5T8fhdSdQf9IVKD6aNiwI/hnmcAZ91isYMJIaCUCx9W098+LgruikeTqzqqxKPUwqJyCPJiyemVVZBOijDGjD38Os0jOiSPL1z3SPjXNANbiNPXAdzTfukjjuknNBbyz3nwgTd3AVFqUJ5hpHlq9MveLnWwttUfoygBmvVjuikxND3znrhsELnZk7k+OjIGxeNEkomyLVta0xxn+HZhjBc4YZ/AFjHjz9u3xRZl2BN4aq9nFwWh16IrQ1aHHEd3j1+4/dB9OtH4e29A2H1DyHQRmOSfQZ1Fy7MHBTGB6J/Djq6p3OxyO2cB+4Car7v/o3GXgfAkj23+x9ID1Teoamo/SXcbvSf2PX7Vc8DdCmE1vN9di+32P9/5YR3vLnhCVGUWBjEkr3yh4H8v9CzmsbdhzOKzsJKM90iFdaTMjRPhGVsakRvOaRidljo6H6G7j+ctrJpsP+4COhDIl0La2+FS4+5mlocBaXY5QnGZysIBYoeSsl5qQzrSj/cgNrfuEzlWBfwA+EjrZyWUvpAAAAABJRU5ErkJggg==">
+          springboot 深入解析 监听器
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h1 id="springboot-深入解析-监听器"><a href="#springboot-深入解析-监听器" class="header-anchor">#</a> springboot 深入解析 监听器</h1> <h3 id="文章目录"><a href="#文章目录" class="header-anchor">#</a> 文章目录</h3> <ul><li><a href="#_1">监听器</a></li> <li><ul><li><a href="#_2">一、监听器模式介绍</a></li> <li><a href="#_189">二、系统监听器介绍</a></li> <li><a href="#_282">三：监听事件触发机制</a></li> <li><a href="#_483">四：自定义监听器</a></li></ul></li></ul> <h1 id="监听器"><a href="#监听器" class="header-anchor">#</a> 监听器</h1> <h2 id="一、监听器模式介绍"><a href="#一、监听器模式介绍" class="header-anchor">#</a> 一、监听器模式介绍</h2> <p>监听器模式可以用下图来体现：<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329152324549.png" alt=""></p> <p>当运行到关键节点的时候，系统会通过广播器发布相应的事件，而我们系统中存在一些监听器，它们会订阅一些 “感兴趣”（实际是人为设定）的事件。</p> <p>当有事件发布之后，相关的监听器会监听到订阅的事件，进而触发相关的 “行为”（实际上就是处理事件）。</p> <p>其实可以理解成 发布 - 订阅的一种形式。</p> <p>监听器模式主要有四个要素</p> <ul><li>事件</li> <li>监听器</li> <li>广播器</li> <li>触发机制</li></ul> <p>下面我们手动实现一下：</p> <p><strong>事件对象</strong></p> <p>创建一个天气事件的抽象类</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public abstract class WeatherEvent {
+
+	// 获得当前天气
+    public abstract String getWeather();
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p>接下来定义两个事件，下雨事件和下雪事件。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class RainEvent extends WeatherEvent {
+    @Override
+    public String getWeather() {
+        return &quot;rain&quot;;
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>public class SnowEvent extends WeatherEvent {
+    @Override
+    public String getWeather() {
+        return &quot;snow&quot;;
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p><strong>监听器</strong></p> <p>下面定义我们的事件监听器</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public interface WeatherListener {
+
+    void onWeatherEvent(WeatherEvent event);
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><p>下雪的事件监听器</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.springframework.stereotype.Component;
+
+@Component
+public class SnowListener implements WeatherListener {
+    @Override
+    public void onWeatherEvent(WeatherEvent event) {
+        if (event instanceof SnowEvent) {
+            System.out.println(&quot;hello &quot; + event.getWeather());
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><p>下雨的事件监听器</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.springframework.stereotype.Component;
+
+@Component
+public class RainListener implements WeatherListener {
+    @Override
+    public void onWeatherEvent(WeatherEvent event) {
+        if (event instanceof RainEvent) {
+            System.out.println(&quot;hello &quot; + event.getWeather());
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><p><strong>广播器</strong></p> <p>下面定义我们的事件广播器</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public interface EventMulticaster {
+	
+	// 广播事件
+    void multicastEvent(WeatherEvent event);
+	
+	// 添加监听器
+    void addListener(WeatherListener weatherListener);
+
+	//移除监听器
+    void removeListener(WeatherListener weatherListener);
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><p>定义一个模板类</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+public abstract class AbstractEventMulticaster implements EventMulticaster {
+
+    private List&lt;WeatherListener&gt; listenerList = new ArrayList&lt;&gt;();
+
+    @Override
+    public void multicastEvent(WeatherEvent event) {
+        doStart();
+        listenerList.forEach(i -&gt; i.onWeatherEvent(event));
+        doEnd();
+    }
+
+    @Override
+    public void addListener(WeatherListener weatherListener) {
+        listenerList.add(weatherListener);
+    }
+
+    @Override
+    public void removeListener(WeatherListener weatherListener) {
+        listenerList.remove(weatherListener);
+    }
+
+    abstract void doStart();
+
+    abstract void doEnd();
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br></div></div><p>定义实现类</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.springframework.stereotype.Component;
+
+@Component
+public class WeatherEventMulticaster extends AbstractEventMulticaster {
+
+    @Override
+    void doStart() {
+        System.out.println(&quot;begin broadcast weather event&quot;);
+    }
+
+    @Override
+    void doEnd() {
+        System.out.println(&quot;end broadcast weather event&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><p>测试方法 <strong>含触发机制</strong></p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class Test {
+
+    public static void main(String[] args) {
+        WeatherEventMulticaster eventMulticaster = new WeatherEventMulticaster();
+        RainListener rainListener = new RainListener();
+        SnowListener snowListener = new SnowListener();
+        eventMulticaster.addListener(rainListener);
+        eventMulticaster.addListener(snowListener);
+        eventMulticaster.multicastEvent(new SnowEvent());
+        eventMulticaster.multicastEvent(new RainEvent());
+        eventMulticaster.removeListener(rainListener);
+        eventMulticaster.multicastEvent(new SnowEvent());
+        eventMulticaster.multicastEvent(new RainEvent());
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><p>结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>begin broadcast weather event
+hello snow
+end broadcast weather event
+begin broadcast weather event
+hello rain
+end broadcast weather event
+begin broadcast weather event
+hello snow
+end broadcast weather event
+begin broadcast weather event
+end broadcast weather event
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><h2 id="二、系统监听器介绍"><a href="#二、系统监听器介绍" class="header-anchor">#</a> 二、系统监听器介绍</h2> <p>下面看一下 Springboot 中的监听器是什么样的情况。</p> <p>springboot 中的<strong>系统监听器</strong>是 ApplicationListener<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329155613259.png" alt=""><br>
+springboot 的监听器通过继承这个接口来实现监听器，这个接口是基于监听器模式的标准进行设计的。在 spring3.0 之后，监听器可以订阅自己感兴趣的事件，当监听器注入到 spring 容器中之后，在程序运行的一些关键节点，会有事件的发生，订阅相关事件的系统监听器会被触发。</p> <p>这个接口继承自 EventListener ，看到源码，你会发现这个接口仅仅是一个声明。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * A tagging interface that all event listener interfaces must extend.
+ * @since JDK1.1
+ */
+public interface EventListener {
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p>回到 ApplicationListener。你会看到函数式接口的注解，我之间写了一篇关于 Lamdda 表达式的长文，你可以找来看看。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>@FunctionalInterface
+public interface ApplicationListener&lt;E extends ApplicationEvent&gt; extends EventListener {
+
+	/**
+	 * Handle an application event.
+	 * @param event the event to respond to
+	 */
+	void onApplicationEvent(E event);
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><p>下面看一下<strong>系统广播器</strong><br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/2020032916084898.png" alt=""><br>
+这个接口主要就是管理事件监听器并且广播事件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public interface ApplicationEventMulticaster {
+
+	// 添加一个系统监听器
+	void addApplicationListener(ApplicationListener&lt;?&gt; listener);
+	
+	// 同上 不过是通过全限定类名获取
+	void addApplicationListenerBean(String listenerBeanName);
+
+	// 移除相关系统监听器
+	void removeApplicationListener(ApplicationListener&lt;?&gt; listener);
+
+	// 同上 不过是通过全限定类名获取
+	void removeApplicationListenerBean(String listenerBeanName);
+
+	// 移除所有系统监听器
+	void removeAllListeners();
+	
+	// 下面两个都是广播事件的方法
+	void multicastEvent(ApplicationEvent event);
+
+	void multicastEvent(ApplicationEvent event, @Nullable ResolvableType eventType);
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><p><strong>系统事件</strong></p> <p><img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329161548651.png" alt=""><br>
+最顶层是 EventObject 代表事件对象，ApplicationEvent 代表应用事件。SpringApplicationEvent 代表是 Spring 当中的应用事件，它这这种集成体系实现了分层描述。</p> <ul><li>ApplicationPreparedEvent – 代表应用准备好</li> <li>ApplicationStartingEvent – 代表应用已经启动</li> <li>ApplicationFailedEvent – 代表应用失败</li> <li>…</li></ul> <p>这与刚才定义的下雪事件和下雨事件类似。每一个 Event 都对应一类事件。</p> <p><strong>事件发送顺序</strong></p> <p><img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329162245534.png" alt=""></p> <ol><li>首先框架启动之后，会发生 start 事件</li> <li>在环境准备好之后触发 environmentPrepared 事件。（相关属性已经加载到容器内）</li> <li>springboot 准备好上下文之后，触发 contextInitialized 事件</li> <li>应用上下文创建完毕，但是 bean 还没有加载完成，这个时候会触发 prepared 事件</li> <li>当 bean 实例化完成之后，但是还没有调用 SpringApplication 的 run 方法，会触发 started 事件</li> <li>当 run 方法调用之后，会触发 ready 事件</li></ol> <p>在整个过程中，如果出现失败会触发 failed 事件。</p> <p><strong>监听器注册</strong></p> <p>在系统初始化器那一篇文章中，我们通过看源码，发现系统初始化器的是通过加载 META-INF 目录下的 spring.factories 文件实现最终注入到 spring 容器的。</p> <p>我们用相同的方式去探究：<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329163049224.png" alt=""><br>
+一直定位一下去，发现这五行代码基本一样，是采用 SpringFactoriesLoader.loadFactoryNames 走的。<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329163146423.png" alt=""><br>
+区别传入的 type 不一样。系统监听器的是 ApplicationListener.class<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329163513223.png" alt=""><br>
+上述过程可以用这张图来概述：<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329163424915.png" alt=""></p> <h2 id="三-监听事件触发机制"><a href="#三-监听事件触发机制" class="header-anchor">#</a> 三：监听事件触发机制</h2> <p>第二部分，我们过了监听器如何被加载的源码，这一部分我们从 run 方法着手去探究事件触发机制。</p> <p>考虑到不同事件的触发机制大同小异，这里就以一个作为入口，过一遍。</p> <p><img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329164133969.png" alt=""><br>
+定位到 listeners.starting() 方法内部<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329164354618.png" alt=""><br>
+我们看一下 SpringApplicationRunListener 是什么样的<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329164528959.png" alt=""><br>
+你会发现它定义了各个阶段的事件。</p> <p>我们回到 starting() 方法<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329164751617.png" alt=""><br>
+通过 debug 可以看到，运行期类的是<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329165343463.png" alt=""><br>
+定位到 EventPubLishingRunListener 的源码，发现它调用了广播器发送了相应的事件。<br> <img src="https://img-blog.csdnimg.cn/20200329165451139.png" alt=""><br>
+这种机制使得监听器的内部实现与外部的调用隔离开了。</p> <p>你可能在这里有点迷惑，我在这里的时候也迷惑了。以最初的例子为例，进行一个改造。</p> <p>我们定义一个 WeatherRunListener</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>@Component
+public class WeatherRunListener {
+
+    @Autowired
+    private WeatherEventMulticaster eventMulticaster;
+
+    public void snow() {
+        eventMulticaster.multicastEvent(new SnowEvent());
+    }
+
+    public void rain() {
+        eventMulticaster.multicastEvent(new RainEvent());
+    }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><p>改造之前的模板类，采用注入的形式。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>@Autowired
+    private List&lt;WeatherListener&gt; listenerList;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><p>我们同样测试一下</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>@SpringBootTest
+class DemoApplicationTests {
+
+
+    @Autowired
+    private WeatherRunListener weatherRunListener;
+
+    @Test
+    void contextLoads() {
+        weatherRunListener.rain();
+        weatherRunListener.snow();
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><p>结果</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>begin broadcast weather event
+hello rain
+end broadcast weather event
+begin broadcast weather event
+hello snow
+end broadcast weather event
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p>这种方式 不是 spring 处理的基本上一样嘛</p> <p>接下来进入 调用广播器的 starting 方法。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public void starting() {
+        this.initialMulticaster.multicastEvent(new ApplicationStartingEvent(this.application, this.args));
+    }
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p>进入 multicastEvent 方法，发现是同名方法。resolveDefaultEventType 方法功能是获取事件的 class 对象的包装。<br> <img src="https://img-blog.csdnimg.cn/20200329171518250.png" alt=""><br>
+继续走，发现这里创建线程池去处理一些事情</p> <p><img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329171627964.png" alt=""><br>
+定位 getApplicationListeners(event, type) 方法的源码</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>protected Collection&lt;ApplicationListener&lt;?&gt;&gt; getApplicationListeners(
+            ApplicationEvent event, ResolvableType eventType) {
+ 
+ 		// 　获得事件的来源Object source = event.getSource();  
+ 		// source其实是SpringApplication
+        Object source = event.getSource();
+        Class&lt;?&gt; sourceType = (source != null ? source.getClass() : null);
+        // 如果已经在缓存中存在感兴趣的监听器，直接返回
+        ListenerCacheKey cacheKey = new ListenerCacheKey(eventType, sourceType);
+ 
+        // Quick check for existing entry on ConcurrentHashMap...
+        ListenerRetriever retriever = this.retrieverCache.get(cacheKey);
+        if (retriever != null) {
+            return retriever.getApplicationListeners();
+        }
+ 
+        if (this.beanClassLoader == null ||
+                (ClassUtils.isCacheSafe(event.getClass(), this.beanClassLoader) &amp;&amp;
+                        (sourceType == null || ClassUtils.isCacheSafe(sourceType, this.beanClassLoader)))) {
+            // Fully synchronized building and caching of a ListenerRetriever
+            synchronized (this.retrievalMutex) {
+                retriever = this.retrieverCache.get(cacheKey);
+                if (retriever != null) {
+                    return retriever.getApplicationListeners();
+                }
+                retriever = new ListenerRetriever(true);
+                Collection&lt;ApplicationListener&lt;?&gt;&gt; listeners =
+                        retrieveApplicationListeners(eventType, sourceType, retriever);
+                this.retrieverCache.put(cacheKey, retriever);
+                return listeners;
+            }
+        }
+        else {
+            // No ListenerRetriever caching -&gt; no synchronization necessary
+            return retrieveApplicationListeners(eventType, sourceType, null);
+        }
+    }
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br></div></div><p>这里最核心的方法是 retrieveApplicationListeners() 方法</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>private Collection&lt;ApplicationListener&lt;?&gt;&gt; retrieveApplicationListeners(
+        ResolvableType eventType, @Nullable Class&lt;?&gt; sourceType, @Nullable ListenerRetriever retriever) {
+ 
+    List&lt;ApplicationListener&lt;?&gt;&gt; allListeners = new ArrayList&lt;&gt;();
+    Set&lt;ApplicationListener&lt;?&gt;&gt; listeners;
+    Set&lt;String&gt; listenerBeans;
+	// 同步方法（防止多线程进入） 获取spring容器加载进来的监听器的实现
+    synchronized (this.retrievalMutex) {
+        listeners = new LinkedHashSet&lt;&gt;(this.defaultRetriever.applicationListeners);
+        listenerBeans = new LinkedHashSet&lt;&gt;(this.defaultRetriever.applicationListenerBeans);
+    }
+    
+    // 遍历监听器
+    for (ApplicationListener&lt;?&gt; listener : listeners) {
+    	// 是否对该事件感兴趣（底层调用 instanceOf方法）
+        if (supportsEvent(listener, eventType, sourceType)) {
+            if (retriever != null) {
+            	// 感兴趣的话 会加入集合当中
+                retriever.applicationListeners.add(listener);
+            }
+            allListeners.add(listener);
+        }
+    }
+    
+
+    if (!listenerBeans.isEmpty()) {
+        BeanFactory beanFactory = getBeanFactory();
+        for (String listenerBeanName : listenerBeans) {
+            try {
+                Class&lt;?&gt; listenerType = beanFactory.getType(listenerBeanName);
+                if (listenerType == null || supportsEvent(listenerType, eventType)) {
+                    ApplicationListener&lt;?&gt; listener =
+                            beanFactory.getBean(listenerBeanName, ApplicationListener.class);
+                    if (!allListeners.contains(listener) &amp;&amp; supportsEvent(listener, eventType, sourceType)) {
+                        if (retriever != null) {
+                            if (beanFactory.isSingleton(listenerBeanName)) {
+                                retriever.applicationListeners.add(listener);
+                            }
+                            else {
+                                retriever.applicationListenerBeans.add(listenerBeanName);
+                            }
+                        }
+                        allListeners.add(listener);
+                    }
+                }
+            }
+            catch (NoSuchBeanDefinitionException ex) {
+                // Singleton listener instance (without backing bean definition) disappeared -
+                // probably in the middle of the destruction phase
+            }
+        }
+    }
+	// 对监听器进行一个排序（按照order值）
+    AnnotationAwareOrderComparator.sort(allListeners);
+    if (retriever != null &amp;&amp; retriever.applicationListenerBeans.isEmpty()) {
+        retriever.applicationListeners.clear();
+        retriever.applicationListeners.addAll(allListeners);
+    }
+    // 返回集合
+    return allListeners;
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br></div></div><p>getApplicationListeners(event, type) 方法其实就是 获得对当前 event 感兴趣的监听器列表。<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329175747612.png" alt=""><br>
+supportsEvent(listener, eventType, sourceType) 方法的内部实现大概是这个流程，最核心的两个方法是 supportsEventType 和 supportsSourceType。<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329175855150.png" alt=""></p> <p>回到之前的步骤：我们现在已经获取到当前 event 感兴趣的监听器列表。</p> <p>下面依次进行触发即可。<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329173516559.png" alt=""></p> <h2 id="四-自定义监听器"><a href="#四-自定义监听器" class="header-anchor">#</a> 四：自定义监听器</h2> <p>创建一个包 listener</p> <p>定义我们的监听器，方式与系统初始化器基本上一致，不再深入探讨，看效果吧。</p> <p>第一种方式：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.core.annotation.Order;
+
+@Order(1)
+public class FirstListener implements ApplicationListener&lt;ApplicationStartedEvent&gt; {
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent event) {
+        System.out.println(&quot;hello first&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><p>在 META-INF 下的 spring.factories 中添加自定义监听器的全限定名</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>org.springframework.context.ApplicationListener=com.example.demo.listener.FirstListener
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>运行发现，注册监听器成功。<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329181025311.png" alt=""><br>
+下面看第二种方式：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.core.annotation.Order;
+
+@Order(2)
+public class SecondListener implements ApplicationListener&lt;ApplicationStartedEvent&gt; {
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent event) {
+        System.out.println(&quot;hello second&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><p>更改启动类</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>//        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication springApplication = new SpringApplication(DemoApplication.class);
+        springApplication.addListeners(new SecondListener());
+        springApplication.run(args);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><p>结果：<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329181229449.png" alt=""><br>
+第三种方式：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.core.annotation.Order;
+
+@Order(3)
+public class ThirdListener implements ApplicationListener&lt;ApplicationStartedEvent&gt; {
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent event) {
+        System.out.println(&quot;hello third&quot;);
+    }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><p>在 application.properties 文件中添加</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>context.listener.classes=com.example.demo.listener.ThirdListener
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>启动</p> <p><img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/20200329181503455.png" alt=""></p> <p>第四种方式：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.SmartApplicationListener;
+import org.springframework.core.annotation.Order;
+
+@Order(4)
+public class FourthListener implements SmartApplicationListener {
+
+	// 对哪一些事件感兴趣
+    @Override
+    public boolean supportsEventType(Class&lt;? extends ApplicationEvent&gt; eventType) {
+        return ApplicationStartedEvent.class.isAssignableFrom(eventType) || ApplicationPreparedEvent.class.isAssignableFrom(eventType);
+    }
+
+	// 事件发生后，我们做一些什么事情
+    @Override
+    public void onApplicationEvent(ApplicationEvent event) {
+        System.out.println(&quot;hello fourth&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><p>以上三种方式 任选一种注入到 spring 容器中，我这里选择第一种方式</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>context.listener.classes=com.example.demo.listener.ThirdListener,com.example.demo.listener.FourthListener
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>结果：<br> <img src="https://gitee.com/zxqzhuzhu/imgs/raw/master/2020032918194499.png" alt=""><br>
+实现 Applicationlistene 接口针对单一事件监听</p> <p>实现 SmartApplicationlistener 接口针对多种事件监听</p></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://github.com/xugaoyi/vuepress-theme-vdoing/edit/master/docs/01.笔记/05.java/05.springboot/01.【Springboot 深入解析】监听器.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=java" title="标签">#java</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">2021/11/07, 22:06:27</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/bb4136/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">spring语法变化</div></a> <a href="/pages/b0c93f/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">SpringBoot 在IDEA中实现热部署 (JRebel实用版)</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/bb4136/" class="prev">spring语法变化</a></span> <span class="next"><a href="/pages/b0c93f/">SpringBoot 在IDEA中实现热部署 (JRebel实用版)</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/d0af1d/"><div>支付宝支付环境搭建</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/913bdd/"><div>7全文索引</div></a> <span>10-08</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/04a1d5/"><div>mysql基本语句</div></a> <span>10-08</span></dt></dl> <dl><dd></dd> <dt><a href="/archives" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"></div> 
+  Theme by
+  <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> 
+    | Copyright © 2019-2021
+    <span>Evan Xu | <a href="https://github.com/xugaoyi/vuepress-theme-vdoing/blob/master/LICENSE" target="_blank">MIT License</a></span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <div class="body-bg" style="background:url() center center / cover no-repeat;opacity:0.5;"></div> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div></div></div></div>
+    <script src="/assets/js/app.95ea1b46.js" defer></script><script src="/assets/js/2.7aad6904.js" defer></script><script src="/assets/js/31.c0ca2707.js" defer></script>
+  </body>
+</html>
