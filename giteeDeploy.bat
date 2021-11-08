@@ -12,13 +12,13 @@ cd D:\project\vscode\theme-vdoing-blog\docs\.vuepress\dist
 
 
 git config --global user.name "a1667834841"
-git config --global user.email "167834841@qq.com"
+git config --global user.email "1667834841@qq.com"
 
 git init
 git add -A
 git commit -m "本地"
-git remote add origin https://github.com/a1667834841/blog.git
-git push -f https://github.com/a1667834841/blog.git master:gh-pages  # 推送到github page分支
+git remote add origin git@github.com:a1667834841/blog.git
+git push -f git@github.com:a1667834841/blog.git master:gh-pages  # 推送到github page分支
 
 git init
 git add -A
