@@ -21,12 +21,25 @@ jobs:
     steps:
       - name: Checkout # 步骤1 拉取代码
         uses: actions/checkout@v1 # 使用的动作。格式：userName/repoName。作用：检出仓库，获取源码。 官方actions库：https://github.com/actions
+      
       - name: Use Node.js ${{ matrix.node-version }} # 步骤2
         uses: actions/setup-node@v1 # 作用：安装nodejs
         with:
           node-version: ${{ matrix.node-version }} # 版本
       - name: build # 步骤3 
         run: npm install && npm run build
+
+      - name: rsync deploy #步骤4 部署到私人服务器
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          # 这里是 rsync 的参数 switches: -avzh --delete --exclude="" --include="" --filter=""
+          switches: -avzh
+          path: docs/.vuepress/dist
+          remote_path: /usr/local/nginx/html/
+          remote_host: 1.15.141.114
+          remote_port: 22
+          remote_user: root
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
         
 
       # - name: Build and Deploy # 步骤3 （只提交到github可以使用这个步骤）
