@@ -35,7 +35,7 @@ jobs:
           # 这里是 rsync 的参数 switches: -avzh --delete --exclude="" --include="" --filter=""
           switches: -avzh
           path: docs/.vuepress/dist/*
-          remote_path: /usr/local/nginx/html/
+          remote_path: /usr/local/nginx/html/blog
           remote_host: 1.15.141.114
           remote_port: 22
           remote_user: root
@@ -51,7 +51,7 @@ jobs:
           #注意这里的 public 是仓库根目录下的 public，也就是 npm run build 生成静态资源的路径，比如有的人是 `docs/.vuepress/dist`
         
 
-          
+
 
       # - name: Build and Deploy # 步骤3 （只提交到github可以使用这个步骤）
       #   uses: JamesIves/github-pages-deploy-action@master # 作用：将项目构建和部署到github。 https://github.com/JamesIves/github-pages-deploy-action
