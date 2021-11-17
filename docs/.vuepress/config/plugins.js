@@ -75,7 +75,7 @@ module.exports = [
   [
     'vuepress-plugin-baidu-tongji', // 百度统计
     {
-      hm: '503f098e7e5b3a5b5d8c5fc2938af002',
+      hm: '90fa1d789bda248d3b76621e1a912093',
     },
   ],
   [
@@ -83,11 +83,11 @@ module.exports = [
     {
       choosen: 'gitalk',
       options: {
-        clientID: 'a6e1355287947096b88b',
-        clientSecret: 'f0e77d070fabfcd5af95bebb82b2d574d7248d71',
-        repo: 'blog-gitalk-comment', // GitHub 仓库
-        owner: 'xugaoyi', // GitHub仓库所有者
-        admin: ['xugaoyi'], // 对仓库有写权限的人
+        clientID: '4d4960d845db40660a11', // 申请地址 https://github.com/settings/applications/new
+        clientSecret: '9021cd1951b85afe6c593c3799ffbf80db229da1',
+        repo: 'blog-comments', // GitHub 仓库
+        owner: 'a1667834841', // GitHub仓库所有者
+        admin: ['a1667834841'], // 对仓库有写权限的人
         // distractionFreeMode: true,
         pagerDirection: 'last', // 'first'正序 | 'last'倒序
         id: '<%- (frontmatter.permalink || frontmatter.to.path).slice(-16) %>', //  页面的唯一标识,长度不能超过50
