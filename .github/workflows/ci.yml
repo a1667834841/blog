@@ -46,13 +46,13 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BASE_BRANCH: master # 要部署的文件夹所在的分支.
-          REPOSITORY_NAME: a1667834841/blog
           BRANCH: gh-pages
           FOLDER: docs/.vuepress/dist
           #注意这里的 public 是仓库根目录下的 public，也就是 npm run build 生成静态资源的路径，比如有的人是 `docs/.vuepress/dist`
         
 
           
+
       # - name: Build and Deploy # 步骤3 （只提交到github可以使用这个步骤）
       #   uses: JamesIves/github-pages-deploy-action@master # 作用：将项目构建和部署到github。 https://github.com/JamesIves/github-pages-deploy-action
       #   env: # 设置环境变量
