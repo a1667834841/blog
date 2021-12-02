@@ -48,6 +48,7 @@ module.exports = [
       { text: '心情杂货', link: '/pages/2d615df9a36a98ed/' },
       { text: '实用技巧', link: '/pages/baaa02/' },
       { text: '友情链接', link: '/friends/' },
+      { text: '画图工具', link: 'https://ggball.top/draw/' },
     ],
   },
   { text: '关于', link: '/about/' },
