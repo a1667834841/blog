@@ -9,7 +9,7 @@ module.exports = [
       {
         text: '面试',
         items: [
-          { text: '河狸家', link: '/pages/2ace5b/' }
+          { text: '总览', link: '/pages/97a2e5/' }
         ],
       },
       {
