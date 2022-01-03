@@ -2,25 +2,16 @@
 module.exports = [
   { text: '首页', link: '/' },
   {
-    text: '笔记',
-    link: '/pages/', //目录页链接，此处link是vdoing主题新增的配置项，有二级导航时，可以点击一级导航跳到目录页
-    items: [
-      // 说明：以下所有link的值只是在相应md文件定义的永久链接（不是什么特殊生成的编码）。另外，注意结尾是有斜杠的
-      {
-        text: '面试',
-        items: [
-          { text: '总览', link: '/pages/97a2e5/' }
-        ],
-      },
-      {
-        text: 'docker',
-        items: [
-          { text: 'docker使服务器硬盘挤满', link: '/pages/e23d09/' },
-          { text: 'docker 安装相关操作', link: '/pages/401855/' }
-        ],
-      }
-
-    ],
+    text: '基础组件',
+    link: '/basic/component/' //目录页链接，此处link是vdoing主题新增的配置项，有二级导航时，可以点击一级导航跳到目录页
+  },
+  {
+    text: '基础知识',
+    link: '/basic/knowledge/' //目录页链接，此处link是vdoing主题新增的配置项，有二级导航时，可以点击一级导航跳到目录页
+  },
+  {
+    text: '算法&设计模式',
+    link: '/algorithm/' //目录页链接，此处link是vdoing主题新增的配置项，有二级导航时，可以点击一级导航跳到目录页
   },
   {
     text: '工具书',
@@ -69,5 +60,9 @@ module.exports = [
       { text: '标签', link: '/tags/' },
       { text: '归档', link: '/archives/' },
     ],
+  },
+  {
+    text: '项目',
+    link: '/pages/8b1e57/',
   },
 ]

@@ -6,6 +6,9 @@ categories:
   - 笔记
   - 面试
 tags:
+article: false
+comment: false
+sidebar: false
 ---
 
 # 面试总览
