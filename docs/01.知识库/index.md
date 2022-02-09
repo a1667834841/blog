@@ -1,13 +1,5 @@
 ---
-title: index
-date: 2022-01-03 16:13:20
-permalink: /pages/4121be/
-categories:
-  - 知识库
-tags:
 
-article: false
-comment: false
 ---
 
 # 后端知识图谱
