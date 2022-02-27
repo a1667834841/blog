@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Markmap</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+#mindmap {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.2.0/dist/style.css">
+</head>
+<body>
+<svg id="mindmap"></svg>
+<script src="https://cdn.jsdelivr.net/npm/d3@6.7.0"></script><script src="https://cdn.jsdelivr.net/npm/markmap-view@0.2.7"></script><script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.2.0/dist/index.umd.min.js"></script><script>(r => {
+                setTimeout(r);
+              })(() => {
+  const {
+    markmap,
+    mm
+  } = window;
+  const toolbar = new markmap.Toolbar();
+  toolbar.attach(mm);
+  const el = toolbar.render();
+  el.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
+  document.body.append(el);
+})</script><script>((getMarkmap, getOptions, data) => {
+        const {
+          Markmap
+        } = getMarkmap();
+        window.mm = Markmap.create('svg#mindmap', getOptions == null ? void 0 : getOptions(), data);
+      })(() => window.markmap,null,{"t":"heading","d":1,"p":{"lines":[0,1]},"v":"mysql","c":[{"t":"heading","d":2,"p":{"lines":[1,2]},"v":"1. 基础知识","c":[{"t":"heading","d":3,"p":{"lines":[2,3]},"v":"1. cs架构"},{"t":"heading","d":3,"p":{"lines":[3,4]},"v":"2. 安装与启动"},{"t":"heading","d":3,"p":{"lines":[4,5]},"v":"3. 连接过程","c":[{"t":"heading","d":4,"p":{"lines":[5,6]},"v":"1. 客户端发起连接（3种，tcp,命名通道与共享内存，socket）"},{"t":"heading","d":4,"p":{"lines":[6,7]},"v":"2. <a href=\"https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20220208173328925.png\">服务端接受连接</a>","c":[{"t":"heading","d":5,"p":{"lines":[7,8]},"v":"1. 处理连接"},{"t":"heading","d":5,"p":{"lines":[8,9]},"v":"2. 解析与优化（1.查询缓存，2.语法解析，3.查询优化）"},{"t":"heading","d":5,"p":{"lines":[9,10]},"v":"3. 存储引擎"}]}]},{"t":"heading","d":3,"p":{"lines":[10,11]},"v":"4. 常用引擎","c":[{"t":"heading","d":4,"p":{"lines":[11,12]},"v":"1. InnoDB"},{"t":"heading","d":4,"p":{"lines":[12,13]},"v":"2. MyISAM"}]}]},{"t":"heading","d":2,"p":{"lines":[15,16]},"v":"2. 启动选项与变量","c":[{"t":"heading","d":3,"p":{"lines":[16,17]},"v":"1. 设置mysql启动参数（就近原则）","c":[{"t":"heading","d":4,"p":{"lines":[17,18]},"v":"1. 命令行和配置文件"},{"t":"heading","d":4,"p":{"lines":[18,19]},"v":"2. 配置文件"}]},{"t":"heading","d":3,"p":{"lines":[19,20]},"v":"1. 系统变量"},{"t":"heading","d":3,"p":{"lines":[20,21]},"v":"2. 状态变量"}]},{"t":"heading","d":2,"p":{"lines":[22,23]},"v":"3. 字符串比较规则","c":[{"t":"heading","d":3,"p":{"lines":[23,24]},"v":"1. 什么是字符集","c":[{"t":"heading","d":4,"p":{"lines":[24,25]},"v":"使用二进制的一组数据代表现实世界的字符串。"},{"t":"heading","d":4,"p":{"lines":[25,26]},"v":"常用字符集 GBK(最多2字节),uft8（最多3字节）,utf8mb4（最多4字节）"}]},{"t":"heading","d":3,"p":{"lines":[26,27]},"v":"2. 字符集比较规则","c":[{"t":"heading","d":4,"p":{"lines":[27,28]},"v":"用来比较同一种字符集的字符大小"}]},{"t":"heading","d":3,"p":{"lines":[28,29]},"v":"3. 字符集应用","c":[{"t":"heading","d":4,"p":{"lines":[29,30]},"v":"注意：对于同一个字符串，如果编码和解码采用的不同字符集，那么结果可能会不同。"}]},{"t":"heading","d":3,"p":{"lines":[30,31]},"v":"4. 四个级别的字符集和比较规则","c":[{"t":"heading","d":4,"p":{"lines":[31,32]},"v":"服务器级别"},{"t":"heading","d":4,"p":{"lines":[32,33]},"v":"数据库级别"},{"t":"heading","d":4,"p":{"lines":[33,34]},"v":"表级别"},{"t":"heading","d":4,"p":{"lines":[34,35]},"v":"列级别"}]}]},{"t":"heading","d":2,"p":{"lines":[35,36]},"v":"4. InnoDB记录结构","c":[{"t":"heading","d":3,"p":{"lines":[36,37]},"v":"1. InnoDB页简介","c":[{"t":"heading","d":4,"p":{"lines":[37,38]},"v":"磁盘和内存数据交互的最小单位，一页=16kb。"}]},{"t":"heading","d":3,"p":{"lines":[38,39]},"v":"2. InnoDB行格式","c":[{"t":"heading","d":4,"p":{"lines":[39,40]},"v":"1. 简介","c":[{"t":"heading","d":5,"p":{"lines":[40,41]},"v":"记录存放在磁盘上的方式成为<code>行格式</code>"}]}]},{"t":"heading","d":3,"p":{"lines":[41,42]},"v":"3. 行格式分类","c":[{"t":"heading","d":4,"p":{"lines":[42,43]},"v":"1. compact类型行格式","c":[{"t":"heading","d":5,"p":{"lines":[43,44]},"v":"1. <a href=\"https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20220211144936545.png\">组成</a>","c":[{"t":"heading","d":6,"p":{"lines":[44,45]},"v":"额外信息（变长字段长度列表，null值列表，记录头信息）"},{"t":"heading","d":6,"p":{"lines":[45,46]},"v":"真实数据"}]}]},{"t":"heading","d":4,"p":{"lines":[46,47]},"v":"2. redundant行格式"},{"t":"heading","d":4,"p":{"lines":[47,48]},"v":"3. Dynamic行格式","c":[{"t":"heading","d":5,"p":{"lines":[48,49]},"v":"这两种行格式类似于 COMPACT行格式 ，只不过在处理行溢出数据时有点儿分歧，它们不会在记录的真实数据处存储字符串的前768个字节，而是把所有的字节都存储到其他页面中，只在记录的真实数据处存储其他页面的地址。"}]},{"t":"heading","d":4,"p":{"lines":[49,50]},"v":"3. Compressed行格式","c":[{"t":"heading","d":5,"p":{"lines":[50,51]},"v":"Compressed 行格式会采用压缩算法对页面进行压缩。"}]}]},{"t":"heading","d":3,"p":{"lines":[51,52]},"v":"4. 行溢出","c":[{"t":"heading","d":4,"p":{"lines":[52,53]},"v":"1. 什么是行溢出","c":[{"t":"heading","d":5,"p":{"lines":[53,54]},"v":"当一页的容量满了，这是如果记录的数据仍然存不下，记录的真实数据的溢出部分会存在另外的页中，此时记录的真实数据会腾出20个字节存放剩余数据在其他页的地址。"}]},{"t":"heading","d":4,"p":{"lines":[54,55]},"v":"2. 行溢出的临界值","c":[{"t":"heading","d":5,"p":{"lines":[55,56]},"v":"记住一页最大容量=16348byte"}]}]}]},{"t":"heading","d":2,"p":{"lines":[57,58]},"v":"5. InnoDB数据页结构","c":[{"t":"heading","d":3,"p":{"lines":[58,59]},"v":"1. 概念：存储数据的页"},{"t":"heading","d":3,"p":{"lines":[59,60]},"v":"2. <a href=\"https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20220213170828841.png\">数据页结构</a>","c":[{"t":"heading","d":4,"p":{"lines":[60,61]},"v":"1. File Header 表示页的一些通用信息，占固定的38字节。"},{"t":"heading","d":4,"p":{"lines":[61,62]},"v":"2. Page Header 表示数据页专有的一些信息，占固定的56个字节。"},{"t":"heading","d":4,"p":{"lines":[62,63]},"v":"3. Infimum + Supremum 两个虚拟的伪记录，分别表示页中的最小和最大记录，占固定的 26 个字节。"},{"t":"heading","d":4,"p":{"lines":[63,64]},"v":"4. User Records 真实存储我们插入的记录的部分，大小不固定。"},{"t":"heading","d":4,"p":{"lines":[64,65]},"v":"5. Free Space 页中尚未使用的部分，大小不确定。"},{"t":"heading","d":4,"p":{"lines":[65,66]},"v":"6. <a href=\"https://gitee.com/zxqzhuzhu/imgs/raw/master/picGo/image-20220213184021833.png\">Page Directory</a> 将一页里面的记录分为多组，记录每组最大记录的物理地址和主键，这个称为<code>槽</code>，页目录就是由<code>槽</code>组成。"},{"t":"heading","d":4,"p":{"lines":[66,67]},"v":"7. File Trailer 用于检验页是否完整的部分，占用固定的8个字节。"}]},{"t":"heading","d":3,"p":{"lines":[67,68]},"v":"3. 记录在数据页的数据结构","c":[{"t":"heading","d":4,"p":{"lines":[68,69]},"v":"每个记录的头信息中都有一个 next_record 属性，从而使页中的所有记录串联成一个 单链表 。"}]},{"t":"heading","d":3,"p":{"lines":[69,70]},"v":"4. 根据主键在页中查找过程","c":[{"t":"heading","d":4,"p":{"lines":[70,71]},"v":"1. 利用二分法查找槽"},{"t":"heading","d":4,"p":{"lines":[71,72]},"v":"2. 通过记录的<code>记录头信息</code>中的next_record,依次寻找主键相同的记录。"}]},{"t":"heading","d":3,"p":{"lines":[72,73]},"v":"5. 页与页之间的数据结构","c":[{"t":"heading","d":4,"p":{"lines":[73,74]},"v":"利用File Header的 前指针和后指针形成双向链表。"}]}]},{"t":"heading","d":2,"p":{"lines":[75,76]},"v":"6. mysql索引","c":[{"t":"heading","d":3,"p":{"lines":[76,77]},"v":"1. InnoDB索引方案","c":[{"t":"heading","d":4,"p":{"lines":[77,78]},"v":"1. 页分裂"},{"t":"heading","d":4,"p":{"lines":[78,79]},"v":"1. 前提条件：<strong>下一个数据页中用户记录的主键值必须大于上一个页中用户记录的主键值。</strong>"},{"t":"heading","d":4,"p":{"lines":[79,80]},"v":"2. 索引 （给数据页做目录）","c":[{"t":"heading","d":5,"p":{"lines":[80,81]},"v":"1. 目录页"},{"t":"heading","d":5,"p":{"lines":[81,82]},"v":"2. 目录项记录"},{"t":"heading","d":5,"p":{"lines":[82,83]},"v":"3. B+数据结构"}]},{"t":"heading","d":4,"p":{"lines":[83,84]},"v":"3. 索引类型","c":[{"t":"heading","d":5,"p":{"lines":[84,85]},"v":"1. 聚簇索引"},{"t":"heading","d":5,"p":{"lines":[85,86]},"v":"2. 二级索引"},{"t":"heading","d":5,"p":{"lines":[86,87]},"v":"3. 联合索引"}]}]},{"t":"heading","d":3,"p":{"lines":[87,88]},"v":"2. MyISAM索引方案","c":[{"t":"heading","d":4,"p":{"lines":[88,89]},"v":"和InnoDB索引区别：MyISAM的索引的子节点不存数据，只存数据的<code>行号和索引列</code>，而InnoDB索引的子节点是保存了索引列和主键（如果是聚簇索引保存整行数据和主键）"}]}]}]})</script>
+</body>
+</html>
