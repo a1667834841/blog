@@ -40,6 +40,7 @@ jobs:
           remote_port: 22
           remote_user: root
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
        
       # - name: githubPage deploy # 步骤五 部署到 GitHub Pages
       #   uses: JamesIves/github-pages-deploy-action@releases/v3
