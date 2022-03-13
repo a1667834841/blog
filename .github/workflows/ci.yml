@@ -35,12 +35,12 @@ jobs:
           # 这里是 rsync 的参数 switches: -avzh --delete --exclude="" --include="" --filter=""
           switches: -avzh
           path: docs/.vuepress/dist/*
-          remote_path: /usr/local/nginx/html
+          remote_path: /usr/local/nginx/html/blog
           remote_host: 1.15.141.114
           remote_port: 22
           remote_user: root
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+
        
       # - name: githubPage deploy # 步骤五 部署到 GitHub Pages
       #   uses: JamesIves/github-pages-deploy-action@releases/v3
