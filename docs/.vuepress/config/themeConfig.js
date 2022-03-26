@@ -22,10 +22,10 @@ module.exports = {
   categoryText: '随笔', // 碎片化文章（_posts文件夹的文章）预设生成的分类值，默认'随笔'
 
   bodyBgImg: [
-    'https://img.ggball.top/bg2.jpg',
-    'https://img.ggball.top/1181423.jpg',
-    'https://img.ggball.top/1015416.jpg',
-    'https://img.ggball.top/1065736.jpg'
+    'https://img.ggball.top/picGo/bg2.jpg',
+    'https://img.ggball.top/picGo/1181423.jpg',
+    'https://img.ggball.top/picGo/1015416.jpg',
+    'https://img.ggball.top/picGo/1065736.jpg'
   ], // body背景大图，默认无。 单张图片 String || 多张图片 Array, 多张图片时每隔15秒换一张。
   bodyBgImgOpacity: 0.5, // body背景图透明度，选值 0 ~ 1.0, 默认0.5
 
@@ -53,7 +53,7 @@ module.exports = {
   },
   blogger: {
     // 博主信息，显示在首页侧边栏
-    avatar: 'https://img.ggball.top/v2-083b45f2ad90754f46799e9c28618538_xl.jpg',
+    avatar: 'https://img.ggball.top/picGo/v2-083b45f2ad90754f46799e9c28618538_xl.jpg',
     name: 'ggball',
     slogan: '后端界的小学生',
   },
