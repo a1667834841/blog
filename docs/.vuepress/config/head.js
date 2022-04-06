@@ -12,6 +12,8 @@ module.exports = [
   ['meta', {name: 'referrer', content: 'no-referrer-when-downgrade'}],
 
   ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移动浏览器主题颜色
+  ['link', { rel: 'stylesheet', href: 'https://at.alicdn.com/t/font_3077305_pt8umhrn4k9.css' }],
+
   [
     'script',
     {

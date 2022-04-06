@@ -108,7 +108,7 @@
 
         <div
             id="busuanzi_container_site_pv"
-            class="icon iconfont icon-eye"
+            class="page-view iconfont icon-view"
             title="浏览量"
         >
             <span id="busuanzi_value_page_pv"></span>
