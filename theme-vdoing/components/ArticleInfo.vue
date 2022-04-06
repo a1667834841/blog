@@ -105,6 +105,15 @@
             >{{ item + ' ' }}</router-link
           >
         </div>
+
+        <div
+            id="busuanzi_container_site_pv"
+            class="icon iconfont icon-eye"
+            title="浏览量"
+        >
+            <span id="busuanzi_value_page_pv"></span>
+        </div>
+
       </div>
     </div>
   </div>

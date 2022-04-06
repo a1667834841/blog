@@ -21,6 +21,11 @@
       target="_blank"
       title="本站主题"
     >Vdoing</a>
+
+    <div>
+      本站访问量<span id="busuanzi_container_site_pv"></span>次 | 您是本站第<span id="busuanzi_container_site_uv"></span>位访客
+    </div>
+
     <template v-if="footer">
       | Copyright © {{ footer.createYear }}-{{ new Date().getFullYear() }}
       <span
@@ -31,7 +36,13 @@
 </template>
 
 <script>
+let script;
 export default {
+
+  mounted() {
+    script = require("busuanzi.pure.js");
+  },
+
   computed: {
     social () {
       return this.$themeConfig.social
@@ -39,7 +50,20 @@ export default {
     footer () {
       return this.$themeConfig.footer
     }
+  },
+
+   
+  // 监听,当路由发生变化的时候执行
+  watch: {
+    $route(to, from) {
+      if (to.path != from.path) {
+        script.fetch();
+      }
+      // console.log(to.path);
+    }
   }
+
+
 }
 </script>
 
