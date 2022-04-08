@@ -46,7 +46,7 @@ module.exports = [
   {
     text: '收藏',
     items: [
-      { text: '网盘', link: 'https://ggball.top/oneManagerjava' },
+      { text: '网盘', link: 'http://1.15.141.114:5244/' },
       // { text: '资源', link: '/pages/eee83a9211a70f9d/' },
       // { text: 'Vue资源', link: '/pages/12df8ace52d493f6/' },
     ],
