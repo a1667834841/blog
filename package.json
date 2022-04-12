@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "axios": "^0.26.1",
     "vuepress-plugin-comment": "^0.7.3"
   }
 }
