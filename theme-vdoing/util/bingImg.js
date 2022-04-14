@@ -9,19 +9,20 @@ const options = {
 
 let body = ''
 
-export async function getImg() {
-    const req = https.request(options,res => {
+export function getImg() {
+   
+    const req = https.request( async (options,res) => {
         console.log(`状态码: ${res.statusCode}`)
     
         if (res.statusCode == 200) {
     
             body = ''
             res.setEncoding('utf8')
-            res.on('data', d => {
+            await res.on('data', d => {
                 body += d
             })
     
-            res.on('end', () =>{
+            await res.on('end', () =>{
                 console.log(body)
             })
             
@@ -40,6 +41,11 @@ export async function getImg() {
 // function getImgUrl(img) {
 //     return img.imges[0].url
 // }
+
+async function get() {
+   
+
+}
 
 
 
