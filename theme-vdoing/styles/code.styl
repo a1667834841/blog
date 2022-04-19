@@ -47,6 +47,14 @@ div[class*="language-"]
     background transparent
     position relative !important
     z-index 1
+    margin: 20px 0;
+    padding: 35px 20px 20px !important;
+  pre[class*="language-"]::before
+    z-index: 10 !important
+    position: absolute
+    top: 10px
+    left: 15px
+    content url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NCIgaGVpZ2h0PSIxNCIgdmlld0JveD0iMCAwIDU0IDE0Ij4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSI+CiAgICAgICAgPGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjYiIGZpbGw9IiNGRjVGNTYiIHN0cm9rZT0iI0UwNDQzRSIgc3Ryb2tlLXdpZHRoPSIuNSI+PC9jaXJjbGU+CiAgICAgICAgPGNpcmNsZSBjeD0iMjYiIGN5PSI2IiByPSI2IiBmaWxsPSIjRkZCRDJFIiBzdHJva2U9IiNERUExMjMiIHN0cm9rZS13aWR0aD0iLjUiPjwvY2lyY2xlPgogICAgICAgIDxjaXJjbGUgY3g9IjQ2IiBjeT0iNiIgcj0iNiIgZmlsbD0iIzI3QzkzRiIgc3Ryb2tlPSIjMUFBQjI5IiBzdHJva2Utd2lkdGg9Ii41Ij48L2NpcmNsZT4KICAgIDwvZz4KPC9zdmc+') !important
   &::before
     position absolute
     z-index 3
@@ -58,7 +66,16 @@ div[class*="language-"]
   &:not(.line-numbers-mode)
     .line-numbers-wrapper
       display none
+   &.line-numbers-mode:active
+     box-shadow: #666 0px 0px 15px;
+     transition: .3s; /*取消过渡*/
+     transform:scale(1.1,1.1);
+    //  animation: tada 1s;
   &.line-numbers-mode
+     -webkit-box-shadow: #666 0px 0px 10px;
+     -moz-box-shadow: #666 0px 0px 10px;
+     box-shadow: #666 0px 0px 5px;
+     transition: .3s;
     .highlight-lines .highlighted
         position relative
         &:before
@@ -76,7 +93,7 @@ div[class*="language-"]
       vertical-align middle
     .line-numbers-wrapper
       position absolute
-      top 0
+      top 15px
       width $lineNumbersWrapperWidth
       text-align center
       // color rgba(255, 255, 255, 0.3)
@@ -93,7 +110,7 @@ div[class*="language-"]
     &::after
       content ''
       position absolute
-      z-index 2
+      // z-index 2
       top 0
       left 0
       width $lineNumbersWrapperWidth
@@ -140,3 +157,16 @@ div[class~="language-bash"]:before
 
 div[class~="language-php"]:before
   content "php"
+
+
+// @keyframes tada {
+//     from {
+//         transform: scale3d(1, 1, 1)
+//     }
+   
+//     to{
+//         transform: scale3d(1.1, 1.1, 1.1) 
+//     }
+   
+
+// }
