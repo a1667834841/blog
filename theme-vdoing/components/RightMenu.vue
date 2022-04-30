@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import * as markmap from "markmap-view";
-import { Transformer } from "markmap-lib";
 export default {
   data () {
     return {
