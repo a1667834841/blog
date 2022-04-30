@@ -1,6 +1,8 @@
 <template>
   <div class="right-menu-wrapper">
     <div class="right-menu-margin">
+       <svg id="abbMindmap" @click="activeMd" style="overflow:hidden; "></svg>
+       <svg id="zoomInMindmap" :class="[isShow? 'hideMind':'showMind']" @click="activeMd"></svg>
       <div class="right-menu-content">
         <div
           :class="['right-menu-item', 'level'+item.level, { active: item.slug === hashText }]"
@@ -15,20 +17,28 @@
 </template>
 
 <script>
+import * as markmap from "markmap-view";
+import { Transformer } from "markmap-lib";
 export default {
   data () {
     return {
       headers: [],
-      hashText: ''
+      hashText: '',
+      title: '',
+      isShow: true,
     }
   },
   mounted () {
     this.getHeadersData()
+    this.getTitle()
     this.getHashText()
+    this.getMd()
+    this.geZoomtMd()
   },
   watch: {
     $route () {
       this.headers = this.$page.headers
+      this.title = this.$page.title
       this.getHashText()
     }
   },
@@ -36,14 +46,80 @@ export default {
     getHeadersData () {
       this.headers = this.$page.headers
     },
+    getTitle () {
+      this.title = this.$page.title
+    },
     getHashText () {
       this.hashText = decodeURIComponent(window.location.hash.slice(1))
+    },
+    getMd() {
+      const transformer = new Transformer();
+      const mdText = this.getMdText();
+      const { root } = transformer.transform(mdText);
+      const { styles, scripts } = transformer.getAssets();
+      const { Markmap, loadCSS, loadJS } = markmap;
+      if (styles) loadCSS(styles);
+      if (scripts) loadJS(scripts, { getMarkmap: () => markmap });
+      Markmap.create("#abbMindmap", undefined, root);
+      this.Markmap = Markmap
+    },
+    geZoomtMd() {
+      const transformer = new Transformer();
+      const mdText = this.getMdText();
+      const { root } = transformer.transform(mdText);
+      const { styles, scripts } = transformer.getAssets();
+      const { Markmap, loadCSS, loadJS } = markmap;
+      if (styles) loadCSS(styles);
+      if (scripts) loadJS(scripts, { getMarkmap: () => markmap });
+      let markMap = new Markmap("#zoomInMindmap", undefined, root);
+    },
+    getMdText() {
+      let text = "";
+      text = "# "+this.title + "\n\r";
+      let headers = this.headers
+
+      for (let i = 0; i < headers.length; i++) {
+        let item = headers[i]
+        text = text + this.repeat("#",item.level) +" "+ item.title + "\n"
+      }
+     return text
+    },
+    repeat(str,n) {
+      return new Array(n+1).join(str);
+    },
+    activeMd() {
+      this.isShow = !this.isShow;
+
+      if(this.isShow) {
+        this.geZoomtMd()
+      } else {
+        this.Markmap.destroy()
+      }
+
+      console.log( this.isShow)
     }
   }
 }
 </script>
 
 <style lang='stylus'>
+
+.hideMind
+  z-index -1 !important
+  left -900px
+  overflow hidden
+  display none
+
+
+.showMind
+   position absolute
+   width 1200px
+   height 1000px
+   left -1000px
+   top -100px
+   z-index 9999 !important
+   transition 1s
+   overflow visible
 .right-menu-wrapper
   width $rightMenuWidth
   float right
