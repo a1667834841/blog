@@ -1,7 +1,7 @@
 <template>
   <div>
     <main class="page">
-
+     
       <div :class="`theme-vdoing-wrapper ${bgStyle}`">
         <ArticleInfo v-if="isArticle()" />
         <component
@@ -9,7 +9,7 @@
           v-if="pageComponent"
           :is="pageComponent"
         />
-
+        <svg id="mindmap" ref="mindmap"></svg>
         <div class="content-wrapper">
           <RightMenu v-if="showRightMenu" />
           <h1 v-if="showTitle">
@@ -48,6 +48,8 @@ import ArticleInfo from './ArticleInfo.vue'
 import Catalogue from './Catalogue.vue'
 import UpdateArticle from './UpdateArticle.vue'
 import RightMenu from './RightMenu.vue'
+import * as markmap from "markmap-view";
+import { Transformer } from "markmap-lib";
 
 import TitleBadgeMixin from '../mixins/titleBadge'
 
@@ -55,13 +57,41 @@ export default {
   mixins: [TitleBadgeMixin],
   data () {
     return {
-      updateBarConfig: null
+      updateBarConfig: null,
+      mark: "",
+      headers: [],
+      title: "",
     }
   },
   props: ['sidebarItems'],
   components: { PageEdit, PageNav, ArticleInfo, Catalogue, UpdateArticle, RightMenu },
+  watch: {
+    $route () {
+      this.headers = this.$page.headers
+      this.title = this.$page.title
+    },
+
+    title(newTitle,oldTitle) {
+      this.$refs.mindmap.innerHTML="";
+      this.getMd()
+    },
+    headers(newHeaders,oldHeaders) {
+      console.log(newHeaders,oldHeaders)
+      if(newHeaders == undefined || newHeaders.length == 0) {
+        this.$refs.mindmap.style.display = "none"
+      } else {
+
+      }
+    }
+    
+  },
   created () {
     this.updateBarConfig = this.$themeConfig.updateBar
+  },
+  mounted () {
+    this.getHeadersData()
+    this.getTitle()
+    // this.getMd()
   },
   computed: {
     bgStyle () {
@@ -92,6 +122,7 @@ export default {
     isShowSlotB() {
       return this.getShowStatus('pageBshowMode')
     }
+    
   },
   methods: {
     getShowStatus(prop) {
@@ -107,14 +138,48 @@ export default {
     },
     isArticle () {
       return this.$frontmatter.article !== false
-    }
+    },
+    getMd() {
+      const transformer = new Transformer();
+      const mdText = this.getMdText();
+      const { root } = transformer.transform(mdText);
+      const { styles, scripts } = transformer.getAssets();
+      const { Markmap, loadCSS, loadJS } = markmap;
+      if (styles) loadCSS(styles);
+      if (scripts) loadJS(scripts, { getMarkmap: () => markmap });
+      this.mark = Markmap.create("#mindmap", undefined, root);
+    },
+     getMdText() {
+      let text = "";
+      text = "# "+this.title + "\n";
+      let headers = this.headers 
+      for (let i = 0; i < headers.length; i++) {
+        let item = headers[i]
+        text = text + this.repeat("#",item.level) +" "+ item.title + "\n"
+      }
+     return text
+    },
+    repeat(str,n) {
+      return new Array(n+1).join(str);
+    },
+    getHeadersData () {
+      this.headers = this.$page.headers
+    },
+    getTitle () {
+      this.title = this.$page.title
+    },
   }
+
+  
 }
 </script>
 
 <style lang="stylus">
 @require '../styles/wrapper.styl'
 
+#mindmap
+  width: 100%
+  height: 300px
 .page
   padding-bottom 2rem
   display block
