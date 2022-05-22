@@ -66,11 +66,11 @@ div[class*="language-"]
   &:not(.line-numbers-mode)
     .line-numbers-wrapper
       display none
-   &.line-numbers-mode:active
-     box-shadow: #666 0px 0px 15px;
-     transition: .3s; /*取消过渡*/
-     transform:scale(1.1,1.1);
-    //  animation: tada 1s;
+  //  &.line-numbers-mode:active
+  //    box-shadow: #666 0px 0px 15px;
+  //    transition: .3s; /*取消过渡*/
+  //    transform:scale(1.1,1.1);
+  //   //  animation: tada 1s;
   &.line-numbers-mode
      -webkit-box-shadow: #666 0px 0px 10px;
      -moz-box-shadow: #666 0px 0px 10px;
@@ -91,6 +91,9 @@ div[class*="language-"]
     pre
       padding-left $lineNumbersWrapperWidth + 1 rem
       vertical-align middle
+      code
+        position relative
+        left: 20px !important
     .line-numbers-wrapper
       position absolute
       top 15px
