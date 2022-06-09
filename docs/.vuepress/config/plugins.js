@@ -99,7 +99,7 @@ module.exports = [
     },
   ],
   [
-    "googleAnalyticsPlugin",
+    "@vuepress/plugin-google-analytics",
     {
       id: 'G-P8FTQN6JH5',
     }
