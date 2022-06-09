@@ -99,12 +99,6 @@ module.exports = [
     },
   ],
   [
-    "@vuepress/plugin-google-analytics",
-    {
-      id: 'G-P8FTQN6JH5',
-    }
-  ],
-  [
     '@vuepress/last-updated', // "上次更新"时间格式
     {
       transformer: (timestamp, lang) => {

@@ -13,13 +13,16 @@ module.exports = [
 
   ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移动浏览器主题颜色
   ['link', { rel: 'stylesheet', href: 'https://at.alicdn.com/t/font_3077305_pt8umhrn4k9.css' }],
-
-  [
-    'script',
-    {
-      'data-ad-client': 'ca-pub-7828333725993554',
-      async: 'async',
-      src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-    },
-  ], // 网站关联Google AdSense 与 html格式广告支持
+  ['script', {
+    async: true,
+    src: 'https://www.googletagmanager.com/gtag/js?id=G-P8FTQN6JH5'
+  }],
+  // [
+  //   'script',
+  //   {
+  //     'data-ad-client': 'ca-pub-7828333725993554',
+  //     async: 'async',
+  //     src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+  //   },
+  // ], // 网站关联Google AdSense 与 html格式广告支持
 ]
