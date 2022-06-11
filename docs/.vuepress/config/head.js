@@ -13,10 +13,18 @@ module.exports = [
 
   ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移动浏览器主题颜色
   ['link', { rel: 'stylesheet', href: 'https://at.alicdn.com/t/font_3077305_pt8umhrn4k9.css' }],
-  ['script', {
-    async: true,
-    src: 'https://www.googletagmanager.com/gtag/js?id=G-P8FTQN6JH5'
-  }],
+  ['script', { src: "https://www.googletagmanager.com/gtag/js?id=G-WBBSGX9GEL",async: true}],
+  ['script', {},
+              " window.dataLayer = window.dataLayer || [];\
+              function gtag(){dataLayer.push(arguments);}\
+              gtag('js', new Date());\
+              gtag('config', 'G-WBBSGX9GEL');"],
+  
+  //  ['script', { src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" ,async: true}],
+  //  ['script', {},
+  //             '(adsbygoogle = window.adsbygoogle || []).push({\
+  //             google_ad_client: "ca-pub-000000000000",\
+  //             enable_page_level_ads: true});'],
   // [
   //   'script',
   //   {
