@@ -50,6 +50,7 @@ import UpdateArticle from './UpdateArticle.vue'
 import RightMenu from './RightMenu.vue'
 import * as markmap from "markmap-view";
 import { Transformer } from "markmap-lib";
+import storage from "good-storage"; // 本地存储
 
 import TitleBadgeMixin from '../mixins/titleBadge'
 
@@ -74,9 +75,11 @@ export default {
     title(newTitle,oldTitle) {
       this.$refs.mindmap.innerHTML="";
       this.getMd()
+      // console.log("watch title:", this.$page.title);
+      storage.set("articleTitle", this.$page.title);
     },
     headers(newHeaders,oldHeaders) {
-      console.log(newHeaders,oldHeaders)
+      // console.log(newHeaders,oldHeaders)
       if(newHeaders == undefined || newHeaders.length == 0) {
         this.$refs.mindmap.style.display = "none"
       } else {
@@ -142,6 +145,9 @@ export default {
     getMd() {
       const transformer = new Transformer();
       const mdText = this.getMdText();
+      if ("" === mdText) {
+        return
+      }
       const { root } = transformer.transform(mdText);
       const { styles, scripts } = transformer.getAssets();
       const { Markmap, loadCSS, loadJS } = markmap;
@@ -153,6 +159,9 @@ export default {
       let text = "";
       text = "# "+this.title + "\n";
       let headers = this.headers 
+      if (headers == undefined || headers == '') {
+        return text
+      }
       for (let i = 0; i < headers.length; i++) {
         let item = headers[i]
         text = text + this.repeat("#",item.level) +" "+ item.title + "\n"
