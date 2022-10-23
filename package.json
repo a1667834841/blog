@@ -12,7 +12,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@vuepress/plugin-docsearch": "^2.0.0-beta.52",
     "@vuepress/plugin-google-analytics": "^1.9.7",
     "busuanzi.pure.js": "^1.0.3",
     "dayjs": "^1.9.7",
