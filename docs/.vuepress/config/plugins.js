@@ -39,6 +39,23 @@ module.exports = [
     searchMaxSuggestions: 10
   }],
 
+  // [
+  //   "@vuepress/docsearch",
+  //   {
+  //     appId:"AJ9QIDZ7KU",
+  //     apiKey: "35d9defc198bf081910bd0cd97fef316",
+  //     indexName: "ggball.top",
+  //     locales: {
+  //       '/': {
+  //         placeholder: 'Search Documentation',
+  //       },
+  //       '/zh/': {
+  //         placeholder: '搜索文档',
+  //       },
+  //     },
+  //   },
+  // ],
+
   [
     'one-click-copy',
     {

@@ -22,15 +22,15 @@ module.exports = {
   categoryText: '随笔', // 碎片化文章（_posts文件夹的文章）预设生成的分类值，默认'随笔'
 
   bodyBgImg: [
-    'https://img.ggball.top/img/1195782.jpg?picGo',
-    'https://img.ggball.top/img/126438.png?picGo',
-    'https://img.ggball.top/img/411820.jpg?picGo',
-    'https://img.ggball.top/img/724132.jpg?picGo',
-    'https://img.ggball.top/img/736461.jpg?picGo',
-    'https://img.ggball.top/img/1089870.jpg?picGo',
-    'https://img.ggball.top/img/1107438.jpg?picGo',
-    'https://img.ggball.top/img/1116548.png?picGo',
-    'https://img.ggball.top/img/1243772.jpg?picGo',
+    // 'https://img.ggball.top/img/1195782.jpg?picGo',
+    // 'https://img.ggball.top/img/126438.png?picGo',
+    // 'https://img.ggball.top/img/411820.jpg?picGo',
+    // 'https://img.ggball.top/img/724132.jpg?picGo',
+    // 'https://img.ggball.top/img/736461.jpg?picGo',
+    // 'https://img.ggball.top/img/1089870.jpg?picGo',
+    // 'https://img.ggball.top/img/1107438.jpg?picGo',
+    // 'https://img.ggball.top/img/1116548.png?picGo',
+    // 'https://img.ggball.top/img/1243772.jpg?picGo',
 
   ], // body背景大图，默认无。 单张图片 String || 多张图片 Array, 多张图片时每隔15秒换一张。
   bodyBgImgOpacity: 1, // body背景图透明度，选值 0 ~ 1.0, 默认0.5

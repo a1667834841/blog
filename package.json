@@ -12,6 +12,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@vuepress/plugin-docsearch": "^2.0.0-beta.52",
     "@vuepress/plugin-google-analytics": "^1.9.7",
     "busuanzi.pure.js": "^1.0.3",
     "dayjs": "^1.9.7",
@@ -24,7 +25,7 @@
     "vuepress-plugin-one-click-copy": "^1.0.2",
     "vuepress-plugin-thirdparty-search": "^1.0.2",
     "vuepress-plugin-zooming": "^1.1.7",
-    "vuepress-theme-vdoing": "^1.8.3",
+    "vuepress-theme-vdoing": "^1.12.8",
     "yamljs": "^0.3.0"
   },
   "dependencies": {
