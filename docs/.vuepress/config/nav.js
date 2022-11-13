@@ -19,6 +19,7 @@ module.exports = [
       { text: '操作手册', link: '/pages/9bf756/' },
       { text: '数据库', link: '/pages/0bb660/' },
       { text: '极客时间', link: '/geekbang/' },
+      { text: '每日随笔', link: '/suibi/' },
     ],
   },
   // {

@@ -17,8 +17,4 @@ module.exports = {
   plugins,
   themeConfig,
 
-  chainWebpack:config => {
-    config.plugins.delete('prefetch')
-    config.plugins.delete('preload')
-  }
 }
