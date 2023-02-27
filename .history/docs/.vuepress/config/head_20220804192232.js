@@ -14,11 +14,6 @@ module.exports = [
   ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移动浏览器主题颜色
   ['link', { rel: 'stylesheet', href: 'https://at.alicdn.com/t/font_3077305_pt8umhrn4k9.css' }],
   ['script', { src: "https://www.googletagmanager.com/gtag/js?id=G-EWS9D4PTVZ",async: true}],
-  ['script', { 
-    src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3373335521603874",
-    async: true,
-    crossorigin:"anonymous"
-  }],
   ['script', {},
               " window.dataLayer = window.dataLayer || [];\
               function gtag(){dataLayer.push(arguments);}\
