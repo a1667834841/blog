@@ -23,6 +23,15 @@ tags:
   desc: 本书主要分为两个篇章，第一篇章为Mybatis3源码篇，从第1章至11章，主要介绍Mybatis框架各个特性的实现原理。第二篇章为Mybatis Spring源码篇，主要介绍Mybatis框架与Spring框架整合原理。 # 描述，可选
   author: ggball # 作者，可选
   avatar: https://img.ggball.top/picGo/image-20220103152247487.png # 头像，可选
+
+- img: https://www.preface.ai/blog/wp-content/uploads/2023/01/2023-article-resize-1-1024x576.jpg
+  link: https://talk.toolkit.show/
+  name: bullet-chatgpt
+  desc: 可以发弹幕的chatgpt。 # 描述，可选
+  author: ggball # 作者，可选
+  avatar: https://img.ggball.top/picGo/image-20220103152247487.png # 头像，可选
+```
+
 ```
 :::
 
